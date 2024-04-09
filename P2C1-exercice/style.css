@@ -5,3 +5,18 @@ a {
 .important {
     color: #A5B4FC;
 }
+
+p {
+    font-family: Arial, sans-serif;
+    font-size: 1.2em;
+    font-style: italic;
+}
+
+h1 {
+    font-family: 'Lobster', cursive;
+    text-align: center;
+}
+.introduction {
+    font-weight: 700;
+    text-decoration: underline;
+}
