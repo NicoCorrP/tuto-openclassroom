@@ -15,8 +15,13 @@ p {
 h1 {
     font-family: 'Lobster', cursive;
     text-align: center;
+    color: black;
+padding: 20px;
 }
 .introduction {
     font-weight: 700;
     text-decoration: underline;
+}
+body {
+    background: linear-gradient(to right,#aa4b6b,#6b6b83,#3b8d99);
 }
