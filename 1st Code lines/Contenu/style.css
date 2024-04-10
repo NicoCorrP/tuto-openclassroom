@@ -1,29 +1,53 @@
-body {
+body{
     background:linear-gradient(to left,#000000,#0f9b0f);
     color: white;
 }
 
-.eyes {
+.back_1 {
+    text-decoration: none;
+    font-style: normal;
+    color: black; 
+}
+
+.back_1:visited{
+    text-decoration: none;
+    font-style: normal;
+    color: black;
+}
+
+.eyes{
     background-image: url(Contenu/cateyes_header.jpg);
     background-size: cover;
     background-position: top;
     padding: 30px;
 }
 
-.cat {
+.cat{
     text-align: center;
     color: white;
 }
 
-.wiki_button {
+.wiki_border {
+    display: flex;
+    justify-content: center;
+}
+
+.wiki_button{
     border-style: solid;
     border-radius: 10px;
     border-color: green;
     border-width: 10px;
     background-color: green;
     box-shadow: 5px 5px 0px 0px;
+    text-decoration: none;
+    text-align: center;
+    font-style: normal;
+    color: black;
+    display: inline-block;
 }
 
-:visited .wiki_button {
+.wiki_button:visited{
     text-decoration: none;
+    font-style: normal;
+    color: black;
 }
