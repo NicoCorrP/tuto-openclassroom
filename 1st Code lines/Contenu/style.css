@@ -1,0 +1,29 @@
+body {
+    background:linear-gradient(to left,#000000,#0f9b0f);
+    color: white;
+}
+
+.eyes {
+    background-image: url(Contenu/cateyes_header.jpg);
+    background-size: cover;
+    background-position: top;
+    padding: 30px;
+}
+
+.cat {
+    text-align: center;
+    color: white;
+}
+
+.wiki_button {
+    border-style: solid;
+    border-radius: 10px;
+    border-color: green;
+    border-width: 10px;
+    background-color: green;
+    box-shadow: 5px 5px 0px 0px;
+}
+
+:visited .wiki_button {
+    text-decoration: none;
+}

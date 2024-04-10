@@ -1,8 +1,28 @@
-p,
-h1{
-    color: royalblue; 
+body {
+    background:linear-gradient(to left,#000000,#0f9b0f);
+    color: white;
 }
 
+.eyes {
+    background-image: url(Contenu/cateyes_header.jpg);
+    background-size: cover;
+    background-position: top;
+    padding: 30px;
+}
+
+h1 {
+    color: white;
+    text-align: center; 
+}
+
+h2 {
+    text-align: center;
+    color: white;
+}
+
+p{
+    text-align: justify;
+}
 .ma_classe {
     color: black;
 }
@@ -12,18 +32,22 @@ h1{
 }
 
 img:hover {
-    opacity: 0.5;
+    opacity: 0.5; 
+}
+
+.picture {
+    display: flex;
+    flex-direction: column;
+}
+
+.picturetwo {
+    align-self: center;
 }
 
 a {
-    font-size: 2em;
+    font-size: 1em;
     text-decoration: none;
-    color: #1d313f
-}
-
-a:hover {
-    color: deeppink;
-    text-decoration: underline;
+    color: white
 }
 
 a:active {
@@ -38,4 +62,9 @@ a:focus {
 
 img:hover + h2 {
     color: deeppink;
+}
+
+.p2_anchor {
+    text-align: center;
+    text-decoration: underline;
 }
