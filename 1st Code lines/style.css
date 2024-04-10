@@ -10,3 +10,32 @@ h1{
 .ma_classe_2 {
     color: deeppink;
 }
+
+img:hover {
+    opacity: 0.5;
+}
+
+a {
+    font-size: 2em;
+    text-decoration: none;
+    color: #1d313f
+}
+
+a:hover {
+    color: deeppink;
+    text-decoration: underline;
+}
+
+a:active {
+    text-decoration-color: #1d313f;
+}
+
+a:focus {
+    background-color: #1d313f;
+    color: white;
+    outline-color: deeppink;
+}
+
+img:hover + h2 {
+    color: deeppink;
+}
