@@ -71,5 +71,11 @@ img:hover + h2 {
 .p2_anchor {
     text-align: center;
     text-decoration: underline;
-    
+}
+
+.conteneur {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
 }
