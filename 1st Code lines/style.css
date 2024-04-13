@@ -79,3 +79,11 @@ img:hover + h2 {
     justify-content: space-between;
     align-items: center;
 }
+
+td {
+    border: 1px solid white;
+}
+
+table {
+    border-collapse: collapse;
+}
