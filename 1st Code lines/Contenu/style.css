@@ -59,7 +59,19 @@ form {
     width: 50%;
 }
 
-input {
+input, 
+textarea {
     padding: 10px;
     border: 1px solid black;
+    outline: none;
+    margin-bottom: 20px;
+    border-radius: 10px;
+}
+
+fieldset {
+    background-color: darkgreen;
+}
+
+legend {
+    background-color: green;
 }
