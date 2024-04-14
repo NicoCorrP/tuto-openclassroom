@@ -87,3 +87,23 @@ td {
 table {
     border-collapse: collapse;
 }
+
+@media screen and (max-width:1200px){
+p {
+    color: deeppink;
+} 
+}
+
+@media screen and (max-width: 960px){
+.conteneur {
+    flex-direction: column;
+}
+
+img {
+    display: none;
+}
+
+p {
+    overflow: scroll;
+}
+}
