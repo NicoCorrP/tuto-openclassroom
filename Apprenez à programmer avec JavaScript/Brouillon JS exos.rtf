@@ -72,7 +72,37 @@ let\cf4  \cf5 motTapeOk\cf4  \cf6 =\cf4  \cf2 true\cf4 \cb1 \
 \pard\pardeftab720\partightenfactor0
 \cf4 \cb1 \outl0\strokewidth0 \'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
 \
-\cf4 \outl0\strokewidth0 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf12 \cb13 \outl0\strokewidth0 \strokec12 const\cf4 \strokec4  \cf14 \strokec14 listeMots\cf4 \strokec4  \cf15 \strokec15 =\cf4 \strokec4  [\cf16 \strokec16 "Cachalot"\cf4 \strokec4 , \cf16 \strokec16 "P\'e9tunia"\cf4 \strokec4 , \cf16 \strokec16 "Serviette"\cf4 \strokec4 ]\cb1 \
+\cf12 \cb13 \strokec12 const\cf4 \strokec4  \cf14 \strokec14 listePhrases\cf4 \strokec4  \cf15 \strokec15 =\cf4 \strokec4  [\cf16 \strokec16 "Pas de panique !"\cf4 \strokec4 , \cf16 \strokec16 "La vie, l univers et le reste"\cf4 \strokec4 , \cf16 \strokec16 "Merci pour le poisson"\cf4 \strokec4 ]\cb1 \
+\
+\cf12 \cb13 \strokec12 let\cf4 \strokec4  \cf17 \strokec17 score\cf4 \strokec4  \cf15 \strokec15 =\cf4 \strokec4  \cf18 \strokec18 0\cf4 \cb1 \strokec4 \
+\
+\cf12 \cb13 \strokec12 let\cf4 \strokec4  \cf17 \strokec17 choix\cf4 \strokec4  \cf15 \strokec15 =\cf4 \strokec4  \cf19 \strokec19 prompt\cf4 \strokec4  (\cf16 \strokec16 "Avec quelle liste voulez-vous jouer: 'mots' ou 'phrases' ?"\cf4 \strokec4 )\cb1 \
+\cf20 \cb13 \strokec20 while\cf4 \strokec4  (\cf17 \strokec17 choix\cf4 \strokec4  \cf15 \strokec15 !==\cf4 \strokec4  \cf16 \strokec16 "mots"\cf4 \strokec4  \cf15 \strokec15 &&\cf4 \strokec4  \cf17 \strokec17 choix\cf4 \strokec4  \cf15 \strokec15 !==\cf4 \strokec4  \cf16 \strokec16 "phrases"\cf4 \strokec4 ) \{\cb1 \
+\cb13     \cf17 \strokec17 choix\cf4 \strokec4  \cf15 \strokec15 =\cf4 \strokec4  \cf19 \strokec19 prompt\cf4 \strokec4 (\cf16 \strokec16 "Avec quelle liste voulez-vous jouer: 'mots' ou 'phrases' ?"\cf4 \strokec4 )\cb1 \
+\cb13 \}\cb1 \
+\
+\cf20 \cb13 \strokec20 if\cf4 \strokec4  (\cf17 \strokec17 choix\cf4 \strokec4  \cf15 \strokec15 ===\cf4 \strokec4  \cf16 \strokec16 "mots"\cf4 \strokec4 ) \{\cb1 \
+\cf20 \cb13 \strokec20 for\cf4 \strokec4  (\cf12 \strokec12 let\cf4 \strokec4  \cf17 \strokec17 i\cf4 \strokec4  \cf15 \strokec15 =\cf4 \strokec4  \cf18 \strokec18 0\cf4 \strokec4  ; \cf17 \strokec17 i\cf4 \strokec4  \cf15 \strokec15 <\cf4 \strokec4  \cf14 \strokec14 listeMots\cf4 \strokec4 .\cf17 \strokec17 length\cf4 \strokec4  ; \cf17 \strokec17 i\cf15 \strokec15 ++\cf4 \strokec4 ) \{\cb1 \
+\cb13     \cf12 \strokec12 let\cf4 \strokec4  \cf17 \strokec17 motUtilisateur\cf4 \strokec4  \cf15 \strokec15 =\cf4 \strokec4  \cf19 \strokec19 prompt\cf4 \strokec4 (\cf16 \strokec16 "Entrez le mot : "\cf4 \strokec4  \cf15 \strokec15 +\cf4 \strokec4  \cf14 \strokec14 listeMots\cf4 \strokec4 [\cf17 \strokec17 i\cf4 \strokec4 ])\cb1 \
+\cb13     \cf20 \strokec20 if\cf4 \strokec4  (\cf17 \strokec17 motUtilisateur\cf4 \strokec4  \cf15 \strokec15 ===\cf4 \strokec4  \cf14 \strokec14 listeMots\cf4 \strokec4 [\cf17 \strokec17 i\cf4 \strokec4 ]) \{\cb1 \
+\cb13         \cf17 \strokec17 score\cf15 \strokec15 ++\cf4 \cb1 \strokec4 \
+\cb13     \}\cb1 \
+\cb13 \}\cb1 \
+\cf17 \cb13 \strokec17 console\cf4 \strokec4 .\cf19 \strokec19 log\cf4 \strokec4 (\cf16 \strokec16 "Votre score est de "\cf4 \strokec4  \cf15 \strokec15 +\cf4 \strokec4  \cf17 \strokec17 score\cf4 \strokec4  \cf15 \strokec15 +\cf4 \strokec4  \cf16 \strokec16 " sur "\cf4 \strokec4  \cf15 \strokec15 +\cf4 \strokec4  \cf14 \strokec14 listeMots\cf4 \strokec4 .\cf17 \strokec17 length\cf4 \strokec4 )\cb1 \
+\cb13 \} \cf20 \strokec20 else\cf4 \strokec4  \{\cb1 \
+\cb13     \cf20 \strokec20 for\cf4 \strokec4  (\cf12 \strokec12 let\cf4 \strokec4  \cf17 \strokec17 i\cf4 \strokec4  \cf15 \strokec15 =\cf4 \strokec4  \cf18 \strokec18 0\cf4 \strokec4  ; \cf17 \strokec17 i\cf4 \strokec4  \cf15 \strokec15 <\cf4 \strokec4  \cf14 \strokec14 listePhrases\cf4 \strokec4 .\cf17 \strokec17 length\cf4 \strokec4  ; \cf17 \strokec17 i\cf15 \strokec15 ++\cf4 \strokec4 ) \{\cb1 \
+\cb13         \cf12 \strokec12 let\cf4 \strokec4  \cf17 \strokec17 phraseUtilisateur\cf4 \strokec4  \cf15 \strokec15 =\cf4 \strokec4  \cf19 \strokec19 prompt\cf4 \strokec4 (\cf16 \strokec16 "Entrez la phrase : "\cf4 \strokec4  \cf15 \strokec15 +\cf4 \strokec4  \cf14 \strokec14 listePhrases\cf4 \strokec4 [\cf17 \strokec17 i\cf4 \strokec4 ])\cb1 \
+\cb13         \cf20 \strokec20 if\cf4 \strokec4  (\cf17 \strokec17 phraseUtilisateur\cf4 \strokec4  \cf15 \strokec15 ===\cf4 \strokec4  \cf14 \strokec14 listePhrases\cf4 \strokec4 [\cf17 \strokec17 i\cf4 \strokec4 ]) \{\cb1 \
+\cb13             \cf17 \strokec17 score\cf15 \strokec15 ++\cf4 \cb1 \strokec4 \
+\cb13         \}\cb1 \
+\cb13     \}\cb1 \
+\cb13     \cf17 \strokec17 console\cf4 \strokec4 .\cf19 \strokec19 log\cf4 \strokec4 (\cf16 \strokec16 "Votre score est de "\cf4 \strokec4  \cf15 \strokec15 +\cf4 \strokec4  \cf17 \strokec17 score\cf4 \strokec4  \cf15 \strokec15 +\cf4 \strokec4  \cf16 \strokec16 " sur "\cf4 \strokec4  \cf15 \strokec15 +\cf4 \strokec4  \cf14 \strokec14 listePhrases\cf4 \strokec4 .\cf17 \strokec17 length\cf4 \strokec4 )\cb1 \
+\cb13 \}\cb1 \
+\
+\pard\pardeftab720\partightenfactor0
+\cf4 \
 \pard\pardeftab720\partightenfactor0
 \cf4 \
 }
