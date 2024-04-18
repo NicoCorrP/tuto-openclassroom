@@ -6,12 +6,12 @@
 
 // Exemple de démonstration
 // function nomDeLaFonction(paramètreVide1, paramètreVide2) {
-//  let variable = paramètreVide1 + paramètreVide2;
-//  return variable
+//  let variable1 = paramètreVide1 + paramètreVide2;
+//  return variable1
 // }
-// let donnéesParamètresVariable = nomDeLaFonction(1,2);
+// let donnéesFinalesVoulues = nomDeLaFonction(premièreDonnéeParamètre1,premièreDonnéeParamètre2);
 
-// console.log(donnéesParamètresVariable)
+// console.log(donnéesFinalesVoulues)
 
 function somme(nombres, nombredeux) {
     let result = nombres + nombredeux;
@@ -28,3 +28,4 @@ function phrase(Un, Deux) {
 let phraseEntière = phrase("Le ciel ","est bleu");
 
 console.log(phraseEntière)
+
