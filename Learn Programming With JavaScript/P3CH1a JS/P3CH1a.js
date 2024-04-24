@@ -30,3 +30,20 @@ const calculateAverageRating = (ratings) => {
     document.querySelector('#colin-score').innerText = colinAverage.toFixed(1) + ' stars';
     document.querySelector('#clara-score').innerText = `${calculateAverageRating([]) === 0 ? 'No ratings' : calculateAverageRating([]) + ' stars'}`
   }
+
+
+  // Deuxieme essai entrainement 
+  // const calculateAverageRating = (arrayFonction) => {
+  
+  //   if(arrayFonction.length === 0) {
+  //     return 0;
+  //   }
+      
+  //   let sum = 0; 
+  //   for (let i = 0 ; i<arrayFonction.length ; i++) {
+  //     sum += arrayFonction[i];
+      
+  //   }
+  //   const sumFinale = sum / arrayFonction.length;
+  //   return sumFinale;
+  // }
