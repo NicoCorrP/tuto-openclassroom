@@ -42,6 +42,24 @@ const shows = [tau, meldrum, clara];
 //   episodesText: claraEpisodesText
 // };
 
+// 2nd Try: 
+// const generation = (infos) => {
+//   const titleText = infos.title;
+//   const seasonsText = infos.numberOfSeasons + ' seasons';
+//   const episodesText = infos.episodesPerSeason + ' episodes per season';
+//   return {
+//     titleText,
+//     seasonsText,
+//     episodesText
+//   };
+// }
+
+// const tauComponent = generation(tau);
+// const meldrumComponent = generation(meldrum);
+// const claraComponent = generation(clara);
+
+// const showComponents = [tauComponent, meldrumComponent, claraComponent];
+
 const InformationGenerationAndPutItInArray = (EpisodesInfos) => {
   const titleText = EpisodesInfos.title; 
   const seasonsText = EpisodesInfos.numberOfSeasons + ' seasons';
