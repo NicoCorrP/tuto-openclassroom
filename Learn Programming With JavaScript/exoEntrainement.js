@@ -68,4 +68,4 @@ function sommeHabs(nbHabitants) {
 let habitants = [10000, 3000, 500000, 600, 0];
 const res = sommeHabs(habitants)
 
-console.log(res);
+console.log(sommeHabs)
