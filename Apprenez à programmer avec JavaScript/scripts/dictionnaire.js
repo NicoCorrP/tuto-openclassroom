@@ -37,17 +37,17 @@
 // Nous allons ici faire l'addition de tous les 
 // nombres de l'array:
 
-function afficherNumeros(nombres) {
-    let affiche = 0;
-    for (let nombre of nombres) {
-        affiche += nombre;
-    }
-    return affiche;
-}
-let valeurs = [10, 20, 30, 40, 50];
-const affichageFinal = afficherNumeros(valeurs);
+// function afficherNumeros(nombres) {
+//     let affiche = 0;
+//     for (let nombre of nombres) {
+//         affiche += nombre;
+//     }
+//     return affiche;
+// }
+// let valeurs = [10, 20, 30, 40, 50];
+// const affichageFinal = afficherNumeros(valeurs);
 
-console.log(affichageFinal);
+// console.log(affichageFinal);
 
 // A l'inverse, ici nous allons concaténer chaque 
 // numéro avec son index et le séparateur approprié:
@@ -60,3 +60,27 @@ console.log(affichageFinal);
 
 // const valeurs = [10, 20, 30, 40, 50];
 // afficherNumeros(valeurs);
+
+// Bien sûr ! Voici un exercice de code basé sur 
+// la fonction `afficherNumeros` mais avec des 
+// données et un énoncé différent :
+
+// **Exercice : Calcul de la somme des prix**
+
+// Énoncé : Vous travaillez sur un système de caisse
+//  pour un magasin en ligne. Écrivez une fonction 
+//  nommée `calculerTotal` qui prend un tableau de
+//  prix en paramètre et retourne la somme totale
+//   de ces prix.
+
+function calculerTotal(tableauDePrix) {
+    let sum = 0;
+    for (let tableaux of tableauDePrix) {
+        sum += tableaux;
+    }
+    return sum;
+}
+
+let prixProduits = [10.99, 63.50, 26.19, 51.99];
+const totalAchat = calculerTotal(prixProduits);
+console.log("le total de l'achat est de : $" + totalAchat.toFixed(2));
