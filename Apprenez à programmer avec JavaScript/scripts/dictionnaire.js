@@ -73,14 +73,33 @@
 //  prix en paramètre et retourne la somme totale
 //   de ces prix.
 
-function calculerTotal(tableauDePrix) {
-    let sum = 0;
-    for (let tableaux of tableauDePrix) {
-        sum += tableaux;
-    }
-    return sum;
-}
+// function calculerTotal(tableauDePrix) {
+//     let sum = 0;
+//     for (let tableaux of tableauDePrix) {
+//         sum += tableaux;
+//     }
+//     return sum;
+// }
 
-let prixProduits = [10.99, 63.50, 26.19, 51.99];
-const totalAchat = calculerTotal(prixProduits);
-console.log("le total de l'achat est de : $" + totalAchat.toFixed(2));
+// let prixProduits = [10.99, 63.50, 26.19, 51.99];
+// const totalAchat = calculerTotal(prixProduits);
+// console.log("le total de l'achat est de : $" + totalAchat.toFixed(2));
+
+// **Exercice : Calcul de la moyenne des notes**
+
+// Énoncé : Vous développez un système de gestion 
+// des notes pour une classe. Écrivez une fonction
+//  nommée `calculerMoyenne` qui prend un tableau 
+//  de notes en paramètre et retourne la moyenne
+//  de ces notes.
+
+function calculerMoyenne(notes) {
+    let sum = 0;
+    for (let note of notes) {
+        sum += note;
+    }
+    return sum / notes.length;
+}
+let notesEleves = [10, 13, 12, 18];
+let moyenneClasse = calculerMoyenne(notesEleves); 
+console.log(moyenneClasse);
