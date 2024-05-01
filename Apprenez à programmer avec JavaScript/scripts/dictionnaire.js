@@ -104,17 +104,30 @@
 // let moyenneClasse = calculerMoyenne(notesEleves); 
 // console.log(moyenneClasse);
 
-function trouverMaximum(tableau) {
-    let maximum = tableau[0];
-    for (let i = 0 ; i < tableau.length ; i++)
-    {
-        if (tableau[i] > maximum) {
-            maximum = tableau[i];
+// function trouverMaximum(tableau) {
+//     let maximum = tableau[0];
+//     for (let i = 0 ; i < tableau.length ; i++)
+//     {
+//         if (tableau[i] > maximum) {
+//             maximum = tableau[i];
+//         }
+//     }
+//     return maximum;
+// }
+
+// let performances = [10.5, 12.7, 24.2, 56.8];
+// let performanceMaximale = trouverMaximum(performances);
+// console.log(performanceMaximale);
+
+function verifierPresence(stock, articleRecherche) {
+    for (let article of stock) {
+        if (article === stock) {
+            return true;
         }
     }
-    return maximum;
+    return false;
 }
-
-let performances = [10.5, 12.7, 24.2, 56.8];
-let performanceMaximale = trouverMaximum(performances);
-console.log(performanceMaximale);
+let stockArticles = ["chaussures", "chaussettes", "chemises", "pantalons"];
+let articleRecherche = "pantalons";
+const estPresent = verifierPresence(stockArticles, articleRecherche);
+console.log("L'article " + articleRecherche + " est present dans le stock :" + estPresent);
