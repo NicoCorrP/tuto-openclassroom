@@ -93,13 +93,28 @@
 //  de notes en paramètre et retourne la moyenne
 //  de ces notes.
 
-function calculerMoyenne(notes) {
-    let sum = 0;
-    for (let note of notes) {
-        sum += note;
+// function calculerMoyenne(notes) {
+//     let sum = 0;
+//     for (let note of notes) {
+//         sum += note;
+//     }
+//     return sum / notes.length;
+// }
+// let notesEleves = [10, 13, 12, 18];
+// let moyenneClasse = calculerMoyenne(notesEleves); 
+// console.log(moyenneClasse);
+
+function trouverMaximum(tableau) {
+    let maximum = tableau[0];
+    for (let i = 0 ; i < tableau.length ; i++)
+    {
+        if (tableau[i] > maximum) {
+            maximum = tableau[i];
+        }
     }
-    return sum / notes.length;
+    return maximum;
 }
-let notesEleves = [10, 13, 12, 18];
-let moyenneClasse = calculerMoyenne(notesEleves); 
-console.log(moyenneClasse);
+
+let performances = [10.5, 12.7, 24.2, 56.8];
+let performanceMaximale = trouverMaximum(performances);
+console.log(performanceMaximale);
