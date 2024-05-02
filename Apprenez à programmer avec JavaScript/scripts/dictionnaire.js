@@ -1,4 +1,4 @@
-// Afficher la concaténation des mots arbre, soleil et nuage, 
+// Afficher la concaténation des mots arbre, soleil et nuage,
 // en utilisant une ou plusieurs fonctions.
 
 // faire une fonction qui prenne en paramètre trois
@@ -34,7 +34,7 @@
 // const mots = ["L'arbre,", "le soleil", "et les nuages."];
 // afficherSurLignesDifferentes(mots);
 
-// Nous allons ici faire l'addition de tous les 
+// Nous allons ici faire l'addition de tous les
 // nombres de l'array:
 
 // function afficherNumeros(nombres) {
@@ -49,7 +49,7 @@
 
 // console.log(affichageFinal);
 
-// A l'inverse, ici nous allons concaténer chaque 
+// A l'inverse, ici nous allons concaténer chaque
 // numéro avec son index et le séparateur approprié:
 
 // function afficherNumeros(nombres) {
@@ -61,14 +61,14 @@
 // const valeurs = [10, 20, 30, 40, 50];
 // afficherNumeros(valeurs);
 
-// Bien sûr ! Voici un exercice de code basé sur 
-// la fonction `afficherNumeros` mais avec des 
+// Bien sûr ! Voici un exercice de code basé sur
+// la fonction `afficherNumeros` mais avec des
 // données et un énoncé différent :
 
 // **Exercice : Calcul de la somme des prix**
 
 // Énoncé : Vous travaillez sur un système de caisse
-//  pour un magasin en ligne. Écrivez une fonction 
+//  pour un magasin en ligne. Écrivez une fonction
 //  nommée `calculerTotal` qui prend un tableau de
 //  prix en paramètre et retourne la somme totale
 //   de ces prix.
@@ -87,9 +87,9 @@
 
 // **Exercice : Calcul de la moyenne des notes**
 
-// Énoncé : Vous développez un système de gestion 
+// Énoncé : Vous développez un système de gestion
 // des notes pour une classe. Écrivez une fonction
-//  nommée `calculerMoyenne` qui prend un tableau 
+//  nommée `calculerMoyenne` qui prend un tableau
 //  de notes en paramètre et retourne la moyenne
 //  de ces notes.
 
@@ -101,7 +101,7 @@
 //     return sum / notes.length;
 // }
 // let notesEleves = [10, 13, 12, 18];
-// let moyenneClasse = calculerMoyenne(notesEleves); 
+// let moyenneClasse = calculerMoyenne(notesEleves);
 // console.log(moyenneClasse);
 
 // function trouverMaximum(tableau) {
@@ -119,15 +119,116 @@
 // let performanceMaximale = trouverMaximum(performances);
 // console.log(performanceMaximale);
 
-function verifierPresence(stock, articleRecherche) {
-    for (let article of stock) {
-        if (article === stock) {
-            return true;
-        }
-    }
-    return false;
-}
-let stockArticles = ["chaussures", "chaussettes", "chemises", "pantalons"];
-let articleRecherche = "pantalons";
-const estPresent = verifierPresence(stockArticles, articleRecherche);
-console.log("L'article " + articleRecherche + " est present dans le stock :" + estPresent);
+// function verifierPresence(stock, articleRecherche) {
+//     for (let article of stock) {
+//         if (article === stock) {
+//             return true;
+//         }
+//     }
+//     return false;
+// }
+// let stockArticles = ["chaussures", "chaussettes", "chemises", "pantalons"];
+// let articleRecherche = "pantalons";
+// const estPresent = verifierPresence(stockArticles, articleRecherche);
+// console.log("L'article " + articleRecherche + " est present dans le stock :" + estPresent);
+
+// function trouverBallon(salleDeSport, ballonRecherche) {
+//     for (let differentesSalles of salleDeSport) {
+//       if (differentesSalles === salleDeSport) {
+//         return true;
+//       }
+//     }
+//     return false;
+//   }
+//   let ballons = ["rugby", "football", "waterpolo", "handball"];
+//   let ballonRecherche = "waterpolo";
+//   let ballonTrouve = trouverBallon(ballons, ballonRecherche);
+//   console.log("Le ballon de " + ballonRecherche + " as-t'-il ete trouve dans la pile de ballons ?: " + ballonTrouve);
+
+// Ecrire une fonction qui prends en parametre une
+// liste de string et les affiches ligne par
+// ligne
+
+// function affichageMots(listeString) {
+//     let motsProposes = "";
+//     for (let i = 0 ; i < listeString.length ; i++) {
+//         motsProposes += listeString[i];
+//         console.log(listeString[i]);
+//     }
+// }
+// let TableauDeMots = ["arbre", "soleil", "vache", "champs", "campagne"];
+// affichageMots(TableauDeMots);
+
+// Maitenant il faut concatener la liste de mots
+// pour en faire une phrase
+
+// function affichageMots(listeString) {
+//     let motsProposes = "";
+//     for (let i = 0 ; i < listeString.length ; i++) {
+//         motsProposes += listeString[i];
+//     }
+//   return motsProposes
+
+// ici, return permets de stocker l'ensemble des
+// mots de la liste et de les retourner concaténés,
+// cependant, comme on peux le voir, ils sont tous
+// liés sans aucun espace
+
+// }
+// let TableauDeMots = ["arbre", "soleil", "vache", "champs", "campagne"];
+// let resultat = affichageMots(TableauDeMots);
+// console.log(resultat);
+
+
+// Ici, on affiche donc la liste de mots en mettant un
+// espace avant chaque mots sauf pour le premier
+
+// function affichageMots(listeString) {
+//     let motsProposes = "";
+//     for (let i = 0 ; i < listeString.length ; i++) {
+//       if (i === 0) {
+//         motsProposes += listeString[i];
+//       }
+
+// c'est ici que le premier mot qui commence a 0
+// (car la liste commence toujours a 0), ne va
+// pas avoir d'espace qui le precede mais les
+// suivants en auront bien un
+
+//       else {
+//       motsProposes += " "+ listeString[i];
+//       }
+//     }
+//   return motsProposes
+// }
+// let TableauDeMots = ["arbre", "soleil", "vache", "champs", "campagne"];
+// let resultat = affichageMots(TableauDeMots);
+// console.log(resultat);
+
+
+// Ici, on affiche à l'inverse la liste de mots 
+// en mettant un espace après chaque mots sauf 
+// pour le dernier
+
+// function affichageMots(listeString) {
+//     let motsProposes = "";
+//     for (let i = 0 ; i < listeString.length ; i++) {
+//       if (i === (listeString.length-1)) {
+
+// ici, on prends la valeur totale de listeString
+// a laquelle on enleve 1 car la liste commence
+//  toujours a 0, comme ça on ajoute l'espace après
+// chaque  mots sauf pour le dernier de la liste
+
+//         motsProposes += listeString[i];
+//       }
+//       else {
+//       motsProposes += listeString[i] + " ";
+//       }
+//     }
+//   return motsProposes
+// }
+// let TableauDeMots = ["arbre", "soleil", "vache", "champs", "campagne", "fleur"];
+// let resultat = affichageMots(TableauDeMots);
+// console.log(resultat);
+
