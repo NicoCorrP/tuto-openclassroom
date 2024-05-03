@@ -61,8 +61,8 @@
 // const valeurs = [10, 20, 30, 40, 50];
 // afficherNumeros(valeurs);
 
-// Bien sûr ! Voici un exercice de code basé sur
-// la fonction `afficherNumeros` mais avec des
+// Voici un exercice de code basé sur
+// la fonction "afficherNumeros" mais avec des
 // données et un énoncé différent :
 
 // **Exercice : Calcul de la somme des prix**
@@ -104,6 +104,22 @@
 // let moyenneClasse = calculerMoyenne(notesEleves);
 // console.log(moyenneClasse);
 
+// 2eme essai:
+// function calculerMoyenne(notes) {
+//     let sum = 0;
+//     for (let note of notes) {
+//       sum += note / notes.length;
+//     }
+//     return sum;
+//   }
+//   let moyenne = [10, 13, 12, 16, 20];
+//   let moyenneDesNotes = calculerMoyenne(moyenne);
+//   console.log(moyenneDesNotes);
+
+
+// Ici, nous avons une fonction qui nous premets
+// de trouver le plus grand nombre dans un tableau
+
 // function trouverMaximum(tableau) {
 //     let maximum = tableau[0];
 //     for (let i = 0 ; i < tableau.length ; i++)
@@ -119,16 +135,20 @@
 // let performanceMaximale = trouverMaximum(performances);
 // console.log(performanceMaximale);
 
+
+// Ici, nous allons verifier dans un stock si
+// l'article recherche y est present:
+
 // function verifierPresence(stock, articleRecherche) {
 //     for (let article of stock) {
-//         if (article === stock) {
+//         if (article === articleRecherche) {
 //             return true;
 //         }
 //     }
 //     return false;
 // }
 // let stockArticles = ["chaussures", "chaussettes", "chemises", "pantalons"];
-// let articleRecherche = "pantalons";
+// let articleRecherche = "chaussettes";
 // const estPresent = verifierPresence(stockArticles, articleRecherche);
 // console.log("L'article " + articleRecherche + " est present dans le stock :" + estPresent);
 
@@ -232,3 +252,17 @@
 // let resultat = affichageMots(TableauDeMots);
 // console.log(resultat);
 
+// Ecrire une autre fonction qui prends en 
+// parametre une liste de string et les affichent 
+// ligne par ligne
+
+
+// function affichageMots(listeString) {
+//     let listes = "";
+//     for (let listes of listeString) {
+//       console.log(listes); 
+//     }
+//   }
+//   let tableauMots = ["jonquille", "tullipe", "rose", "magnolia"];
+//   affichageMots(tableauMots);
+  
