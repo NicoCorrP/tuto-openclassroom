@@ -358,3 +358,15 @@
 //     afficherResultat(score, nbMotsProposes)
 // }
 
+// function trouverSalle(salleDeMaths, SalleRecherchee) {
+//     for (let differentesSalles of salleDeMaths) {
+//       if (differentesSalles === salleDeMaths) {
+//         return true;
+//       }
+//     }
+//     return false;
+//   }
+//   let sallesDifferentes = ["Maths", "Francais", "Anglais", "Svt"];
+//   let SalleRecherchee = "Maths";
+//   let SalleTrouvee = trouverSalle(salleDeMaths, SalleRecherchee);
+//   console.log("La salle de " + SalleRecherchee + " se trouve dans l'enceinte de l'etablissement avec les salles de : " + SalleTrouvee);
