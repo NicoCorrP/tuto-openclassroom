@@ -24,10 +24,17 @@
 # print(f"Type taille: {type(taille)}")
 # print(f"Type est étudiant: {type(est_etudiant)}")
 
-fruits = ["pomme", "banane", "orange"]
-fruits.append("Kiwi")
-fruits.remove("Orange")
-fruits[1] = "Ananas"
-print("La liste fruits contient", len(fruits), "éléments.")
-fruits.sort()
-print(fruits)
+# fruits = ["pomme", "banane", "orange"]
+# fruits.append("Kiwi")
+# fruits.remove("Orange")
+# fruits[1] = "Ananas"
+# print("La liste fruits contient", len(fruits), "éléments.")
+# fruits.sort()
+# print(fruits)
+
+fruits = {"pomme":"rouge", "banane":"jaune", "orange":"orange"}
+fruits["kiwi"] = "vert"
+couleur_banane = fruits["banane"]
+fruits["pomme"] = "vert"
+del fruits["orange"]
+print(fruits.keys())
