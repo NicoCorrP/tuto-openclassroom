@@ -75,34 +75,57 @@
 # if __name__ == "__main__":
 #     main()
 
-def main():
-    nombres = input("Saisissez une liste de nombres séparés par des virgules : ")
-    nombres = nombres.split(",")
-    print("Liste des nombres: ", nombres)
+# def main():
+#     nombres = input("Saisissez une liste de nombres séparés par des virgules : ")
+#     nombres = nombres.split(",")
+#     print("Liste des nombres: ", nombres)
 
-    somme = 0
-    for nombre in nombres:
-        somme += int(nombre)
-    print("Somme des nombres :", somme)
+#     somme = 0
+#     for nombre in nombres:
+#         somme += int(nombre)
+#     print("Somme des nombres :", somme)
 
-    moyenne = somme / len(nombres)
-    print("Moyenne des nombres :", moyenne)
+#     moyenne = somme / len(nombres)
+#     print("Moyenne des nombres :", moyenne)
 
-    nombre_sup_moyenne = 0
-    for nombre in liste:
-        if int(nombre) > moyenne:
-            nombre_sup_moyenne += 1
-    print("Nombre de nombres supérieurs à la moyenne :", nombre_sup_moyenne)
+#     nombre_sup_moyenne = 0
+#     for nombre in liste:
+#         if int(nombre) > moyenne:
+#             nombre_sup_moyenne += 1
+#     print("Nombre de nombres supérieurs à la moyenne :", nombre_sup_moyenne)
 
-    nombre_pairs = 0
-    i = 0
-    while i < len(liste):
-        if int(liste[i]) % 2 == 0:
-            nombre_pairs += 1
-        i += 1
-    print("Nombre de nombres pairs :", nombre_pairs)
+#     nombre_pairs = 0
+#     i = 0
+#     while i < len(liste):
+#         if int(liste[i]) % 2 == 0:
+#             nombre_pairs += 1
+#         i += 1
+#     print("Nombre de nombres pairs :", nombre_pairs)
 
 
-# Ne touchez pas le code ci-dessous
+# # Ne touchez pas le code ci-dessous
+# if __name__ == "__main__":
+#     main()
+
+def salaire_mensuel(salaire_annuel):
+    return salaire_annuel / 12
+
+def salaire_hebdomadaire(salaire_mensuel):
+    return salaire_mensuel / 4
+
+def salaire_horaire(salaire_hebdomadaire, heures_travaillees):
+    return salaire_hebdomadaire / heures_travaillees 
+
+def main(): 
+    salaire_annuel = float(input("Veuillez saisir ici votre salaire annuel: "))
+    heures_travaillees = float(input("Veuillez saisir ici votre nombres d'heures travaillées par semaine: "))
+
+    mensuel = salaire_mensuel(salaire_annuel)
+    hebdomadaire = salaire_hebdomadaire(mensuel)
+    horaire = salaire_horaire(hebdomadaire, heures_travaillees) 
+
+    print("Votre salaire horaire est de", horaire, "euros.") 
+
 if __name__ == "__main__":
     main()
+
