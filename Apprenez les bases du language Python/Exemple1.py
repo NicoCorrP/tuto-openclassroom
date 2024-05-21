@@ -107,6 +107,28 @@
 # if __name__ == "__main__":
 #     main()
 
+# def salaire_mensuel(salaire_annuel):
+#     return salaire_annuel / 12
+
+# def salaire_hebdomadaire(salaire_mensuel):
+#     return salaire_mensuel / 4
+
+# def salaire_horaire(salaire_hebdomadaire, heures_travaillees):
+#     return salaire_hebdomadaire / heures_travaillees 
+
+# def main(): 
+#     salaire_annuel = float(input("Veuillez saisir ici votre salaire annuel: "))
+#     heures_travaillees = float(input("Veuillez saisir ici votre nombres d'heures travaillées par semaine: "))
+
+#     mensuel = salaire_mensuel(salaire_annuel)
+#     hebdomadaire = salaire_hebdomadaire(mensuel)
+#     horaire = salaire_horaire(hebdomadaire, heures_travaillees) 
+
+#     print("Votre salaire horaire est de", horaire, "euros.") 
+
+# if __name__ == "__main__":
+#     main()
+
 def salaire_mensuel(salaire_annuel):
     return salaire_annuel / 12
 
@@ -114,18 +136,16 @@ def salaire_hebdomadaire(salaire_mensuel):
     return salaire_mensuel / 4
 
 def salaire_horaire(salaire_hebdomadaire, heures_travaillees):
-    return salaire_hebdomadaire / heures_travaillees 
+    return salaire_hebdomadaire / heures_travaillees
 
-def main(): 
-    salaire_annuel = float(input("Veuillez saisir ici votre salaire annuel: "))
-    heures_travaillees = float(input("Veuillez saisir ici votre nombres d'heures travaillées par semaine: "))
+def main():
+    salaire_annuel = float(input("Entrez ici votre salaire annuel: "))
+    heures_travaillees = float(input("Entrez ici le nombres d'heures total travaillées par semaine: "))
 
     mensuel = salaire_mensuel(salaire_annuel)
     hebdomadaire = salaire_hebdomadaire(mensuel)
     horaire = salaire_horaire(hebdomadaire, heures_travaillees) 
 
-    print("Votre salaire horaire est de", horaire, "euros.") 
+    print("Votre salaire horaire est de", horaire, "euros.")
 
-if __name__ == "__main__":
-    main()
-
+    
