@@ -153,9 +153,21 @@ def horaires_mensuels(horaires_annuels):
     return horaires_annuels / 12
 
 def horaires_hebdos(horaires_mensuels):
-    return horaires_mensuels / 6
+    return horaires_mensuels / 4
 
-def horaires_fixe(horaires_hebdos, horaires_totaux):
-    return horaires_hebdos / horaires_totaux
+def taux_horaire(horaires_hebdos, revenu_mensuel):
+    return revenu_mensuel/ horaires_hebdos
 
 def main():
+    horaires_annuels = float(input("Entrez ici vos horaires annuels: "))
+    revenu_mensuel = float(input("Entrez ici le revenu mensuel : "))
+
+    mensuel = horaires_mensuels(horaires_annuels)
+    hebdomadaire = horaires_hebdos(mensuel)
+    taux = taux_horaire(hebdomadaire, revenu_mensuel)
+
+    print("Votre rémunération horaire est de", taux, "euros.")
+    
+    main()
+
+    
