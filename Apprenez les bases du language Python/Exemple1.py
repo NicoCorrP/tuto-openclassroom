@@ -149,3 +149,13 @@
 #     print("Votre salaire horaire est de", horaire, "euros.")
 
     
+def horaires_mensuels(horaires_annuels):
+    return horaires_annuels / 12
+
+def horaires_hebdos(horaires_mensuels):
+    return horaires_mensuels / 6
+
+def horaires_fixe(horaires_hebdos, horaires_totaux):
+    return horaires_hebdos / horaires_totaux
+
+def main():
