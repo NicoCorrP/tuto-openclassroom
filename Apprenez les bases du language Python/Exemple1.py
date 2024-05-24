@@ -149,25 +149,35 @@
 #     print("Votre salaire horaire est de", horaire, "euros.")
 
     
-def horaires_mensuels(horaires_annuels):
-    return horaires_annuels / 12
+# def horaires_mensuels(horaires_annuels):
+#     return horaires_annuels / 12
 
-def horaires_hebdos(horaires_mensuels):
-    return horaires_mensuels / 4
+# def horaires_hebdos(horaires_mensuels):
+#     return horaires_mensuels / 4
 
-def taux_horaire(horaires_hebdos, revenu_mensuel):
-    return revenu_mensuel/ horaires_hebdos
+# def taux_horaire(horaires_hebdos, revenu_mensuel):
+#     return revenu_mensuel/ horaires_hebdos
 
-def main():
-    horaires_annuels = float(input("Entrez ici vos horaires annuels: "))
-    revenu_mensuel = float(input("Entrez ici le revenu mensuel : "))
+# def main():
+#     horaires_annuels = float(input("Entrez ici vos horaires annuels: "))
+#     revenu_mensuel = float(input("Entrez ici le revenu mensuel : "))
 
-    mensuel = horaires_mensuels(horaires_annuels)
-    hebdomadaire = horaires_hebdos(mensuel)
-    taux = taux_horaire(hebdomadaire, revenu_mensuel)
+#     mensuel = horaires_mensuels(horaires_annuels)
+#     hebdomadaire = horaires_hebdos(mensuel)
+#     taux = taux_horaire(hebdomadaire, revenu_mensuel)
 
-    print("Votre rémunération horaire est de", taux, "euros.")
+#     print("Votre rémunération horaire est de", taux, "euros.")
     
-    main()
+#     main()
 
-    
+import requests
+
+from bs4 import BeautifulSoup
+
+url = "https://www.gov.uk/search/news-and-communications"
+page = requests.get(url)
+soup = BeautifulSoup(page.content, 'html.parser')
+
+# Voir le code html source
+print(page.content)
+
