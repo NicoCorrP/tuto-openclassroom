@@ -170,14 +170,14 @@
     
 #     main()
 
-import requests
+# import requests
 
-from bs4 import BeautifulSoup
+# from bs4 import BeautifulSoup
 
-url = "https://www.gov.uk/search/news-and-communications"
-page = requests.get(url)
-soup = BeautifulSoup(page.content, 'html.parser')
+# url = "https://www.gov.uk/search/news-and-communications"
+# page = requests.get(url)
+# soup = BeautifulSoup(page.content, 'html.parser')
 
-# Voir le code html source
-print(page.content)
+# # Voir le code html source
+# print(page.content)
 
