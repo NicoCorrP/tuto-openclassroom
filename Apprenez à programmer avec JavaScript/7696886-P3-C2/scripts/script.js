@@ -34,6 +34,22 @@ function afficherEmail(nom, email, score) {
     location.href = mailto
 }
 
+function validerNom(nom) {
+    if (nom.length >= 2) {
+        return true
+    }
+    return false
+}
+
+function validerEmail(email) {
+    let emailRegExp = new RegExp ("[a-z0-9._-]+@[a-z0-9._-]+\\.[a-z0-9._-]+")
+    if (emailRegExp.test(email)) {
+    return true
+}
+return false
+}
+
+
 /**
  * Cette fonction lance le jeu. 
  * Elle demande à l'utilisateur de choisir entre "mots" et "phrases" et lance la boucle de jeu correspondante
@@ -82,7 +98,11 @@ function lancerJeu() {
     }
 
 let form = document.querySelector('form');
+
+// on place un ecouteur sur le formulaire au submit 
 form.addEventListener("submit", (event) => {
+    // pour empecher le comportement par defaut =>
+    // le raffraichissement de la page
         event.preventDefault();
 
         let baliseNom = document.getElementById("nom")
@@ -91,6 +111,13 @@ form.addEventListener("submit", (event) => {
         let baliseEmail = document.getElementById("email")
         let email = baliseEmail.value
 
+        if (validerNom(nom) && validerEmail(email)) {
+            let scoreEmail = `${score} / ${i}`
+            afficherEmail(nom, email, scoreEmail)
+        } else {
+            console.log("Erreur")
+        }
+
         let scoreEmail = `${score} / ${i}`
 
         afficherEmail(nom, email, scoreEmail)
@@ -98,3 +125,4 @@ form.addEventListener("submit", (event) => {
 
     afficherResultat(score, i)
 }
+
