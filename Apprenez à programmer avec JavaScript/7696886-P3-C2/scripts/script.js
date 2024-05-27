@@ -35,20 +35,54 @@ function afficherEmail(nom, email, score) {
 }
 
 function validerNom(nom) {
-    if (nom.length >= 2) {
-        return true
+    if (nom.length < 2) {
+        throw new Error("Le nom est trop court")
     }
-    return false
+
 }
 
 function validerEmail(email) {
     let emailRegExp = new RegExp ("[a-z0-9._-]+@[a-z0-9._-]+\\.[a-z0-9._-]+")
-    if (emailRegExp.test(email)) {
-    return true
-}
-return false
+    if (!emailRegExp.test(email)) {
+    throw new Error ("L’e-mail n’est pas valide")
+    }
+
 }
 
+// Cette fonction affiche le message d'erreur passé en paramètre. 
+// Si le span existe déjà, alors il est réutilisé pour ne pas multiplier
+// les messages d'erreurs. 
+
+function afficherMessageErreur(message) {
+    let spanErreurMessage = document.getElementById("erreurMessage")
+
+    if (!spanErreurMessage) {
+        let popup = document.querySelector(".popup")
+        spanErreurMessage = document.createElement("span")
+        spanErreurMessage.id = "erreurMessage"
+
+        popup.append(spanErreurMessage)
+    }
+
+    spanErreurMessage.innerText = message
+}
+
+function gererFormulaire(scoreEmail) {
+    try {
+    let baliseNom = document.getElementById("nom")
+    let nom = baliseNom.value
+    validerNom.nom
+
+    let baliseEmail = document.getElementById("email")
+    let email = baliseEmail.value
+    validerEmail(email)
+    afficherMessageErreur("")
+    afficherEmail(nom, email, scoreEmail)
+
+    } catch(erreur) {
+        afficherMessageErreur("erreur.message")
+    }
+}
 
 /**
  * Cette fonction lance le jeu. 
@@ -56,6 +90,7 @@ return false
  */
 function lancerJeu() {
     // Initialisations
+    initAddEventListenerPopup()
     let score = 0
     let i = 0
     let listePropositions = 0
@@ -65,6 +100,7 @@ function lancerJeu() {
 
     afficherProposition(listeMots[i])
 
+    // Gestion de l'événement click sur le bouton "valider"
     btnValiderMot.addEventListener("click", () => {
         console.log(inputEcriture.value)
         if (inputEcriture.value === listeMots[i]) {
@@ -86,17 +122,20 @@ function lancerJeu() {
     for (let i =0; i < listeBtnRadio.length; i++) {
         listeBtnRadio[i].addEventListener("change", (event) => {
 
+            // Si c'est le premier élément qui a été modifié, alors nous voulons
+            // jouer avec la listeMots. 
             if (event.target.value === "1") {
                 listePropositions = listeMots
             } else {
+                // Sinon nous voulons jouer avec la liste des phrases
                 listePropositions = listePhrases
             }
-        
-        afficherProposition(listePropositions[i])
-    
+            // Et on modifie l'affichage en direct. 
+            afficherProposition(listePropositions[i])
         })
     }
 
+// gestion de l'évènement submit sur le formulaire de partage
 let form = document.querySelector('form');
 
 // on place un ecouteur sur le formulaire au submit 
@@ -104,25 +143,9 @@ form.addEventListener("submit", (event) => {
     // pour empecher le comportement par defaut =>
     // le raffraichissement de la page
         event.preventDefault();
-
-        let baliseNom = document.getElementById("nom")
-        let nom = baliseNom.value
-
-        let baliseEmail = document.getElementById("email")
-        let email = baliseEmail.value
-
-        if (validerNom(nom) && validerEmail(email)) {
-            let scoreEmail = `${score} / ${i}`
-            afficherEmail(nom, email, scoreEmail)
-        } else {
-            console.log("Erreur")
-        }
-
         let scoreEmail = `${score} / ${i}`
-
-        afficherEmail(nom, email, scoreEmail)
+        gererFormulaire(scoreEmail)
 })
 
     afficherResultat(score, i)
 }
-
