@@ -28,6 +28,13 @@ class Jeu:
         # fixer les fps
         self.clock = pygame.time.Clock()
 
+        # creer une liste contenant toutes les positions
+        # du serpent
+        self.position_serpent = []
+
+        # creer la variable liée à la taille du serpent
+        self.taille_du_serpent = 1
+
     # creer une fonction permettant de creer un 
     # rectangle representant les limites du jeu
     # aux dimensions: (100, 100, 600, 500), et
@@ -83,6 +90,24 @@ class Jeu:
                 self.pomme_position_x = random.randrange(110,690,10)
                 self.pomme_position_y = random.randrange(110,590,10)
 
+                # augmenter la taille du serpent
+
+                self.taille_du_serpent += 1
+
+                # creer une liste qui contient la tete du serpent
+                la_tete_du_serpent = []
+                la_tete_du_serpent.append(self.serpent_position_x)
+                la_tete_du_serpent.append(self.pomme_position_y)
+
+                # append la liste des positions du serpent 
+                self.position_serpent.append(la_tete_du_serpent)
+
+                # cond pour resoudre le probleme des positions
+                # du serpent avec la taille du serpent
+                if len(self.position_serpent) > self.taille_du_serpent:
+
+                    self.position_serpent.pop(0)
+
             # on choisis la couleur du background 
             # en RGB
             self.ecran.fill(((0, 0, 0)))
@@ -91,6 +116,18 @@ class Jeu:
             pygame.draw.rect(self.ecran,(0, 255, 0),(self.serpent_position_x,self.serpent_position_y,self.serpent_corps,self.serpent_corps))
             # afficher la pomme
             pygame.draw.rect(self.ecran(255,0,0),(self.pomme_position_x,self.pomme_position_y,self.pomme, self.pomme))
+
+            # afficher les autres parties du serpent
+            for partie_du_serpent in self.position_serpent:
+                pygame.draw.rect(self.ecran(0,255,0),(partie_du_serpent[0],partie_du_serpent[1],self.serpent_corps,self.serpent_corps))
+
+            # si le serpent se mord la queue alors le jeu s'arrête
+
+            for partie_du_serpent in self.position_serpent[:-1]:
+
+                if la_tete_du_serpent == partie_du_serpent:
+            
+                    sys.exit()
 
              # afficher les limites
             self.creer_limites()
