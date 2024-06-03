@@ -32,6 +32,16 @@ class Jeu:
         # créer la variable liée à la taille du serpent
         self.taille_du_serpent = 1
 
+        self.ecran_du_debut = True
+
+        # charger l'image
+        self.image = pygame.image.load('jeu-snake.jpg')
+        # retrecir l'image
+        self.image_titre = pygame.transform.scale(self.image,(200,100))
+
+        # creer la variable score
+        self.score = 0
+
     # créer une fonction permettant de créer un rectangle représentant les limites du jeu
     # aux dimensions: (100, 100, 600, 500), et l'épaisseur du rectangle qui est égale à 3
     def creer_limites(self):
@@ -39,6 +49,34 @@ class Jeu:
 
     def fonction_principale(self):
         # permet de gérer les events, d'afficher certains composants du jeu grâce au while loop
+
+        while self.ecran_du_debut:
+            for evenement in pygame.event.get():
+            # pour permettre de fermer en appuyant sur la croix rouge
+                if evenement.type == pygame.QUIT:
+                    self.jeu_encours = False
+
+                if evenement.type == pygame.KEYDOWN:
+                    if evenement.key == pygame.K_RETURN:
+
+                        self.ecran_du_debut = False
+
+                self. ecran.fill((0,0,0))
+
+                # methode d'affichage des images et textes
+                self.ecran.blit(self.image_titre,(300,50,100,50))
+                # self.creer_message('petite','Snake',(300,300, 100,50), (255, 255, 255))
+                self.creer_message,('petite','Le but du jeu est que le serpent se développe'
+                                    ,(250, 200, 200, 5), (240, 240, 240))
+                self.creer_message('petite',' pour cela, il a besoin de pommes, mangez-en autants que possible, mais faites bien attention à ne pas vous mordre la queue !!',
+                                   (190, 220, 200, 5), (240, 240, 240))
+                self.creer_message('moyenne','Appuyer sur Enter pour commencer', (200, 450, 200, 5),
+                                   (255, 255, 255))
+                
+                pygame.display.flip()
+
+
+
 
         while self.jeu_encours:
             # on récupère chaque event de la méthode "pygame.event.get()" qui contient tous les events du jeu
@@ -79,6 +117,8 @@ class Jeu:
 
                 # augmenter la taille du serpent
                 self.taille_du_serpent += 1
+                # augmenter le score
+                self.score += 1
 
             # créer une liste qui contient la tête du serpent
             tete_serpent = [self.serpent_position_x, self.serpent_position_y]
@@ -92,6 +132,9 @@ class Jeu:
 
             self.afficher_les_elements()
             self.se_mord(tete_serpent)
+
+            self.creer_message('grande','Snake Game',(320,10,100,50),(255,255,255))
+            self.creer_message('grande','{}',format(str(self.score)),(375,50,50,50),(255,255,255))
 
             # afficher les limites
             self.creer_limites()
@@ -124,6 +167,25 @@ class Jeu:
         for partie_du_serpent in self.position_serpent[:-1]:
             if partie_du_serpent == tete_serpent:
                 self.jeu_encours = False
+
+    # creer une fonction qui permets l'affichage des
+    # messages
+    def creer_message(self,font,message,message_rectangle,couleur):
+
+        if font == 'petite':
+            font = pygame.font.SysFont('Lato',20,False)
+
+        elif font == 'moyenne':
+            font = pygame.font.SysFont('Lato',30,False)
+
+        elif font == 'grande':
+            font = pygame.font.SysFont('Lato',40,True)
+
+        # on affiche le message
+        message = font.render(message,True,couleur)
+
+        self.ecran.blit(message,message_rectangle)
+
 
         pygame.display.flip()
 
