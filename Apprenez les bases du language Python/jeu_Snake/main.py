@@ -34,6 +34,8 @@ class Jeu:
 
         self.ecran_du_debut = True
 
+        self.image_tete_serpent = pygame.image.load('la_tete_du_serpent.png')
+
         # charger l'image
         self.image = pygame.image.load('jeu-snake.jpg')
         # retrecir l'image
@@ -150,8 +152,10 @@ class Jeu:
         self.ecran.fill((0, 0, 0))
 
         # afficher le serpent
-        pygame.draw.rect(self.ecran, (0, 255, 0), (self.serpent_position_x, self.serpent_position_y, self.serpent_corps, self.serpent_corps))
+        # pygame.draw.rect(self.ecran, (0, 255, 0), (self.serpent_position_x, self.serpent_position_y, self.serpent_corps, self.serpent_corps))
         
+        self.ecran.blit(self.image_tete_serpent,(self.serpent_position_x,self.serpent_position_y,self.serpent_corps,self.serpent_corps))
+  
         # afficher la pomme
         pygame.draw.rect(self.ecran, (255, 0, 0), (self.pomme_position_x, self.pomme_position_y, self.pomme, self.pomme))
 
@@ -159,7 +163,7 @@ class Jeu:
 
     # afficher les autres parties du serpent
     def afficher_serpent(self):
-        for partie_du_serpent in self.position_serpent:
+        for partie_du_serpent in self.position_serpent[:-1]:
             pygame.draw.rect(self.ecran, (0, 255, 0), (partie_du_serpent[0], partie_du_serpent[1], self.serpent_corps, self.serpent_corps))
 
     def se_mord(self, tete_serpent):
