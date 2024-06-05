@@ -6,6 +6,8 @@ class Jeu:
     # contenir toutes les variables et fonctions utiles au jeu
 
     def __init__(self):
+        # initialisation de tous les modules de Pygame
+        pygame.init()
         # on définit les dimensions de la fenêtre de jeu
         self.ecran = pygame.display.set_mode((800, 600))
         # puis on lui donne un titre
@@ -35,7 +37,6 @@ class Jeu:
         self.ecran_du_debut = True
 
         self.image_tete_serpent = pygame.image.load('la_tete_du_serpent.png')
-
         # charger l'image
         self.image = pygame.image.load('jeu-snake.jpg')
         # retrecir l'image
@@ -57,6 +58,8 @@ class Jeu:
             # pour permettre de fermer en appuyant sur la croix rouge
                 if evenement.type == pygame.QUIT:
                     self.jeu_encours = False
+                    pygame.quit()
+                    sys.exit()
 
                 if evenement.type == pygame.KEYDOWN:
                     if evenement.key == pygame.K_RETURN:
@@ -64,11 +67,10 @@ class Jeu:
                         self.ecran_du_debut = False
 
                 self. ecran.fill((0,0,0))
-
                 # methode d'affichage des images et textes
                 self.ecran.blit(self.image_titre,(300,50,100,50))
                 # self.creer_message('petite','Snake',(300,300, 100,50), (255, 255, 255))
-                self.creer_message,('petite','Le but du jeu est que le serpent se développe'
+                self.creer_message('petite','Le but du jeu est que le serpent se développe'
                                     ,(250, 200, 200, 5), (240, 240, 240))
                 self.creer_message('petite',' pour cela, il a besoin de pommes, mangez-en autants que possible, mais faites bien attention à ne pas vous mordre la queue !!',
                                    (190, 220, 200, 5), (240, 240, 240))
@@ -77,36 +79,34 @@ class Jeu:
                 
                 pygame.display.flip()
 
-
-
-
         while self.jeu_encours:
             # on récupère chaque event de la méthode "pygame.event.get()" qui contient tous les events du jeu
             for evenement in pygame.event.get():
                 # pour permettre de fermer en appuyant sur la croix rouge
                 if evenement.type == pygame.QUIT:
                     self.jeu_encours = False
+                    pygame.quit()
+                    sys.exit()
 
+            # faire bouger le serpent en appuyant sur les touches du clavier
+            # et eviter qu'il ne se morde en revenant sur lui-même
                 if evenement.type == pygame.KEYDOWN:
-                    if evenement.key == pygame.K_RIGHT:
+                    if evenement.key == pygame.K_RIGHT and self.serpent_direction_x == 0:
                         self.serpent_direction_x = 10
                         self.serpent_direction_y = 0
-
-                    if evenement.key == pygame.K_LEFT:
+                elif evenement.key == pygame.K_LEFT and self.serpent_direction_x == 0:
                         self.serpent_direction_x = -10
                         self.serpent_direction_y = 0
-
-                    if evenement.key == pygame.K_DOWN:
+                elif evenement.key == pygame.K_DOWN and self.serpent_direction_y == 0:
                         self.serpent_direction_y = 10
                         self.serpent_direction_x = 0
-
-                    if evenement.key == pygame.K_UP:
+                elif evenement.key == pygame.K_UP and self.serpent_direction_y == 0:
                         self.serpent_direction_y = -10
                         self.serpent_direction_x = 0
 
+
             # faire bouger le serpent s'il se trouve dans les limites du jeu
-            if self.serpent_position_x <= 100 or self.serpent_position_x >= 700 \
-                    or self.serpent_position_y <= 100 or self.serpent_position_y >= 600:
+            if self.serpent_position_x <= 100 or self.serpent_position_x >= 700 or self.serpent_position_y <= 100 or self.serpent_position_y >= 600:
                 self.jeu_encours = False
 
             # fonction pour faire bouger le serpent
@@ -116,7 +116,6 @@ class Jeu:
             if self.pomme_position_y == self.serpent_position_y and self.serpent_position_x == self.pomme_position_x:
                 self.pomme_position_x = random.randrange(110, 690, 10)
                 self.pomme_position_y = random.randrange(110, 590, 10)
-
                 # augmenter la taille du serpent
                 self.taille_du_serpent += 1
                 # augmenter le score
@@ -124,23 +123,20 @@ class Jeu:
 
             # créer une liste qui contient la tête du serpent
             tete_serpent = [self.serpent_position_x, self.serpent_position_y]
-
             # ajouter la tête du serpent à la liste des positions du serpent
             self.position_serpent.append(tete_serpent)
-
             # condition pour résoudre le problème des positions du serpent avec la taille du serpent
             if len(self.position_serpent) > self.taille_du_serpent:
                 self.position_serpent.pop(0)
 
             self.afficher_les_elements()
             self.se_mord(tete_serpent)
-
-            self.creer_message('grande','Snake Game',(320,10,100,50),(255,255,255))
-            self.creer_message('grande','{}',format(str(self.score)),(375,50,50,50),(255,255,255))
-
-            # afficher les limites
+            self.afficher_score()
             self.creer_limites()
-            self.clock.tick(30)
+            self.ajuster_difficulte()
+        
+        self.ecran_game_over()
+
 
     def serpent_mouvement(self):
         # faire bouger le serpent
@@ -150,15 +146,11 @@ class Jeu:
     def afficher_les_elements(self):
         # on choisit la couleur du background en RGB
         self.ecran.fill((0, 0, 0))
-
         # afficher le serpent
         # pygame.draw.rect(self.ecran, (0, 255, 0), (self.serpent_position_x, self.serpent_position_y, self.serpent_corps, self.serpent_corps))
-        
         self.ecran.blit(self.image_tete_serpent,(self.serpent_position_x,self.serpent_position_y,self.serpent_corps,self.serpent_corps))
-  
         # afficher la pomme
         pygame.draw.rect(self.ecran, (255, 0, 0), (self.pomme_position_x, self.pomme_position_y, self.pomme, self.pomme))
-
         self.afficher_serpent()
 
     # afficher les autres parties du serpent
@@ -187,14 +179,42 @@ class Jeu:
 
         # on affiche le message
         message = font.render(message,True,couleur)
-
         self.ecran.blit(message,message_rectangle)
-
-
         pygame.display.flip()
 
+    def afficher_score(self):
+        self.creer_message('grande','Snake Game', (320,10,100,50), (255,255,255))
+        self.creer_message('grande','{}'.format(str(self.score)), (375,50,50,50), (255,255,255,255))
+
+    def ajuster_difficulte(self):
+        if self.score < 5:
+            self.clock.tick(10)
+        elif self.score < 10:
+            self.clock.tick(15)
+        else:
+            self.clock.tick(20)
+
+    def ecran_game_over(self):
+        while not self.jeu_encours:
+            self.ecran.fill((0, 0, 0))
+            self.creer_message('grande', 'Game Over', (300, 200, 200, 50), (255, 0, 0))
+            self.creer_message('moyenne', 'Score: {}'.format(self.score), (350, 300, 100, 50), (255, 255, 255))
+            self.creer_message('petite', 'Appuyer sur Enter pour recommencer ou Esc pour quitter', (200, 400, 400, 50), (255, 255, 255))
+            pygame.display.flip()
+
+            for evenement in pygame.event.get():
+                if evenement.type == pygame.QUIT:
+                    pygame.quit()
+                    sys;exit()
+                if evenement.type == pygame.KEYDOWN:
+                    if evenement.key == pygame.K_RETURN:
+                        self.__init__()
+                        self.fonction_principale()
+                    if evenement.key == pygame.K_ESCAPE:
+                        pygame.quit()
+                        sys.exit()
+
 if __name__ == '__main__':
-    pygame.init()
     Jeu().fonction_principale()
+    # pour quitter Pygame correctement
     pygame.quit()
-    sys.exit()
