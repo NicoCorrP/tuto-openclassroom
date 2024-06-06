@@ -2,6 +2,24 @@ import sys
 import random
 import pygame
 
+#couleurs
+NOIR = (0, 0, 0)
+BLANC = (255, 255, 255)
+ROUGE = (255, 0, 0)
+VERT = (0, 255, 0)
+GRIS = (240, 240, 240)
+
+#dimensions
+LARGEUR_ECRAN = 800
+HAUTEUR_ECRAN = 600
+TAILLE_SERPENT = 10
+TAILLE_POMME = 10
+
+#positions initiales
+POSITION_INITIALE_SERPENT = (300, 300)
+LIMITES_JEU = (100, 100, 600, 500)
+
+
 class Jeu:
     # contenir toutes les variables et fonctions utiles au jeu
 
@@ -9,33 +27,29 @@ class Jeu:
         # initialisation de tous les modules de Pygame
         pygame.init()
         # on définit les dimensions de la fenêtre de jeu
-        self.ecran = pygame.display.set_mode((800, 600))
+        self.ecran = pygame.display.set_mode((LARGEUR_ECRAN, HAUTEUR_ECRAN))
         # puis on lui donne un titre
         pygame.display.set_caption("Jeu Snake")
         self.jeu_encours = True
 
         # créer les variables de position et direction du serpent
-        self.serpent_position_x = 300
-        self.serpent_position_y = 300
+        self.serpent_position_x, self.serpent_position_y = POSITION_INITIALE_SERPENT
         self.serpent_direction_x = 0
         self.serpent_direction_y = 0
-        self.serpent_corps = 10
+        self.serpent_corps = TAILLE_SERPENT
 
         # créer la position de la pomme
         self.pomme_position_x = random.randrange(110, 690, 10)
         self.pomme_position_y = random.randrange(110, 590, 10)
-        self.pomme = 10
+        self.pomme = TAILLE_POMME
+
         # fixer les fps
         self.clock = pygame.time.Clock()
-
         # créer une liste contenant toutes les positions du serpent
         self.position_serpent = []
-
         # créer la variable liée à la taille du serpent
         self.taille_du_serpent = 1
-
         self.ecran_du_debut = True
-
         self.image_tete_serpent = pygame.image.load('la_tete_du_serpent.png')
         # charger l'image
         self.image = pygame.image.load('jeu-snake.jpg')
@@ -44,6 +58,38 @@ class Jeu:
 
         # creer la variable score
         self.score = 0
+
+    def gerer_evenements(self):
+        for evenement in pygame.event.get():
+            if evenement.type == pygame.QUIT:
+                self.jeu_encours = False
+                pygame.quit()
+                sys.exit()
+            if evenement.type == pygame.KEYDOWN:
+                if evenement.key == pygame.K_RIGHT and self.serpent_direction_x == 0:
+                    self.serpent_direction_x = TAILLE_SERPENT
+                    self.serpent_direction_y = 0
+            elif evenement.key == pygame.K_LEFT and self.serpent_direction_x == 0:
+                    self.serpent_direction_x = -TAILLE_SERPENT
+                    self.serpent_direction_y = 0
+            elif evenement.key == pygame.K_DOWN and self.serpent_direction_y == 0:
+                    self.serpent_direction_y = TAILLE_SERPENT
+                    self.serpent_direction_x = 0
+            elif evenement.key == pygame.K_UP and self.serpent_direction_y == 0:
+                    self.serpent_direction_y = -TAILLE_SERPENT
+                    self.serpent_direction_x = 0
+    def fonction_principale(self):
+        while self.ecran_du_debut:
+            self.afficher_ecran_debut()
+
+        while self.jeu_encours:
+            self.gerer_evenements()
+            self.mise_a_jour_jeu()
+            self.afficher_les_elements()
+            self.creer_limites()
+            self.afficher_score()
+            self.ajuster_difficulte()
+        self.ecran_game_over()
 
     # créer une fonction permettant de créer un rectangle représentant les limites du jeu
     # aux dimensions: (100, 100, 600, 500), et l'épaisseur du rectangle qui est égale à 3
