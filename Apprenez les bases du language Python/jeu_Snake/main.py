@@ -31,33 +31,15 @@ class Jeu:
         # puis on lui donne un titre
         pygame.display.set_caption("Jeu Snake")
         self.jeu_encours = True
-
-        # créer les variables de position et direction du serpent
-        self.serpent_position_x, self.serpent_position_y = POSITION_INITIALE_SERPENT
-        self.serpent_direction_x = 0
-        self.serpent_direction_y = 0
-        self.serpent_corps = TAILLE_SERPENT
-
-        # créer la position de la pomme
-        self.pomme_position_x = random.randrange(110, 690, 10)
-        self.pomme_position_y = random.randrange(110, 590, 10)
-        self.pomme = TAILLE_POMME
-
-        # fixer les fps
-        self.clock = pygame.time.Clock()
-        # créer une liste contenant toutes les positions du serpent
-        self.position_serpent = []
-        # créer la variable liée à la taille du serpent
-        self.taille_du_serpent = 1
         self.ecran_du_debut = True
         self.image_tete_serpent = pygame.image.load('la_tete_du_serpent.png')
         # charger l'image
         self.image = pygame.image.load('jeu-snake.jpg')
         # retrecir l'image
         self.image_titre = pygame.transform.scale(self.image,(200,100))
-
-        # creer la variable score
-        self.score = 0
+        # fixer les fps
+        self.clock = pygame.time.Clock()
+        
 
     def gerer_evenements(self):
         for evenement in pygame.event.get():
@@ -91,10 +73,23 @@ class Jeu:
             self.ajuster_difficulte()
         self.ecran_game_over()
 
+    # fonction de reinitialisation des variables
+    def reinitialiser_jeu(self):
+        self.serpent_position_x, self.serpent_position_y = POSITION_INITIALE_SERPENT
+        self.serpent_direction_x = 0
+        self.serpent_direction_y = 0
+        # créer une liste contenant toutes les positions du serpent
+        self.position_serpent = []
+        self.taille_du_serpent = 1
+        # variable du score
+        self.score = 0
+        self.pomme_position_x = random.randrange(110,690,10)
+        self.pomme_position_y = random.randrange(110,590,10)
+
     # créer une fonction permettant de créer un rectangle représentant les limites du jeu
     # aux dimensions: (100, 100, 600, 500), et l'épaisseur du rectangle qui est égale à 3
     def creer_limites(self):
-        pygame.draw.rect(self.ecran, (255, 255, 255), (100, 100, 600, 500), 3)
+        pygame.draw.rect(self.ecran, BLANC, LIMITES_JEU, 3)
 
     def fonction_principale(self):
         # permet de gérer les events, d'afficher certains composants du jeu grâce au while loop
@@ -191,12 +186,12 @@ class Jeu:
 
     def afficher_les_elements(self):
         # on choisit la couleur du background en RGB
-        self.ecran.fill((0, 0, 0))
+        self.ecran.fill(NOIR)
         # afficher le serpent
         # pygame.draw.rect(self.ecran, (0, 255, 0), (self.serpent_position_x, self.serpent_position_y, self.serpent_corps, self.serpent_corps))
-        self.ecran.blit(self.image_tete_serpent,(self.serpent_position_x,self.serpent_position_y,self.serpent_corps,self.serpent_corps))
+        self.ecran.blit(self.image_tete_serpent,(self.serpent_position_x,self.serpent_position_y,TAILLE_SERPENT,TAILLE_SERPENT))
         # afficher la pomme
-        pygame.draw.rect(self.ecran, (255, 0, 0), (self.pomme_position_x, self.pomme_position_y, self.pomme, self.pomme))
+        pygame.draw.rect(self.ecran, ROUGE, (self.pomme_position_x, self.pomme_position_y, TAILLE_POMME, TAILLE_POMME))
         self.afficher_serpent()
 
     # afficher les autres parties du serpent
@@ -242,10 +237,10 @@ class Jeu:
 
     def ecran_game_over(self):
         while not self.jeu_encours:
-            self.ecran.fill((0, 0, 0))
-            self.creer_message('grande', 'Game Over', (300, 200, 200, 50), (255, 0, 0))
-            self.creer_message('moyenne', 'Score: {}'.format(self.score), (350, 300, 100, 50), (255, 255, 255))
-            self.creer_message('petite', 'Appuyer sur Enter pour recommencer ou Esc pour quitter', (200, 400, 400, 50), (255, 255, 255))
+            self.ecran.fill(NOIR)
+            self.creer_message('grande', 'Game Over', (300, 200, 200, 50), ROUGE)
+            self.creer_message('moyenne', 'Score: {}'.format(self.score), (350, 300, 100, 50), BLANC)
+            self.creer_message('petite', 'Appuyer sur Enter pour recommencer ou Esc pour quitter', (200, 400, 400, 50), BLANC)
             pygame.display.flip()
 
             for evenement in pygame.event.get():
