@@ -194,6 +194,21 @@ class Jeu:
         pygame.draw.rect(self.ecran, ROUGE, (self.pomme_position_x, self.pomme_position_y, TAILLE_POMME, TAILLE_POMME))
         self.afficher_serpent()
 
+    def mise_a_jour_jeu(self):
+        if self.serpent_position_x < 100 or self.serpent_position_x >= 700 or self.serpent_position_y < 100 or self.serpent_position_y >= 600:
+            self.jeu_encours = False
+        self.serpent_mouvement()
+        if self.pomme_position_y == self.serpent_position_y and self.serpent_position_x == self.pomme_position_x:
+            self.pomme_position_x = random.randrange(110, 690, 10)
+            self.pomme_position_y = random.randrange(110, 590, 10)
+            self.taille_du_serpent += 1
+            self.score += 1
+        tete_serpent = [self.serpent_position_x, self.serpent_position_y]
+        self.position_serpent.append(tete_serpent)
+        if len(self.position_serpent) > self.taille_du_serpent:
+            self.position_serpent.pop(0)
+        self.se_mord(tete_serpent)
+
     # afficher les autres parties du serpent
     def afficher_serpent(self):
         for partie_du_serpent in self.position_serpent[:-1]:
@@ -224,8 +239,8 @@ class Jeu:
         pygame.display.flip()
 
     def afficher_score(self):
-        self.creer_message('grande','Snake Game', (320,10,100,50), (255,255,255))
-        self.creer_message('grande','{}'.format(str(self.score)), (375,50,50,50), (255,255,255,255))
+        self.creer_message('grande','Snake Game', (320,10,100,50), BLANC)
+        self.creer_message('grande','{}'.format(str(self.score)), (375,50,50,50), BLANC)
 
     def ajuster_difficulte(self):
         if self.score < 5:
