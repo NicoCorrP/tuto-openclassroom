@@ -39,6 +39,21 @@ class Jeu:
         self.image_titre = pygame.transform.scale(self.image,(200,100))
         # fixer les fps
         self.clock = pygame.time.Clock()
+
+        # charger le meilleur score
+        self.meilleur_score = 0
+        self.charger_meilleur_score()
+    
+    def charger_meilleur_score(self):
+        try: 
+            with open('meilleur_score.txt', 'r') as file:
+                self.meilleur_score = int(file.read())
+        except:
+            self.meilleur_score = 0
+
+    def enregistrer_meilleur_score(self):
+        with open('meilleur_score.txt', 'w') as file:
+            file.write(str(self.meilleur_score))
         
 
     def gerer_evenements(self):
@@ -197,6 +212,9 @@ class Jeu:
     def mise_a_jour_jeu(self):
         if self.serpent_position_x < 100 or self.serpent_position_x >= 700 or self.serpent_position_y < 100 or self.serpent_position_y >= 600:
             self.jeu_encours = False
+            if self.score > self.meilleur_score:
+                self.meilleur_score = self.score
+                self.enregistrer_meilleur_score()
         self.serpent_mouvement()
         if self.pomme_position_y == self.serpent_position_y and self.serpent_position_x == self.pomme_position_x:
             self.pomme_position_x = random.randrange(110, 690, 10)
@@ -241,6 +259,8 @@ class Jeu:
     def afficher_score(self):
         self.creer_message('grande','Snake Game', (320,10,100,50), BLANC)
         self.creer_message('grande','{}'.format(str(self.score)), (375,50,50,50), BLANC)
+        self.creer_message('moyenne', 'Meilleur Score: {}'.format(str(self.meilleur_score)), (250, 100, 100, 50), BLANC)
+
 
     def ajuster_difficulte(self):
         if self.score < 5:
