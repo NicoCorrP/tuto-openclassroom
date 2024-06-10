@@ -202,9 +202,19 @@ class Jeu:
     def afficher_les_elements(self):
         # on choisit la couleur du background en RGB
         self.ecran.fill(NOIR)
+        if self.serpent_direction_x > 0:
+            image_tete = pygame.transform.rotate(self.image_tete_serpent, 270)
+        elif self.serpent_direction_x < 0:
+            image_tete = pygame.transform.rotate(self.image_tete_serpent, 90)
+        elif self.serpent_direction_y > 0:
+            image_tete = self.image_tete_serpent
+        elif self.serpent_direction_y < 0:
+            image_tete = pygame.transform.rotate(self.image_tete_serpent, 180)
+        else:
+            image_tete = self.image_tete_serpent
         # afficher le serpent
         # pygame.draw.rect(self.ecran, (0, 255, 0), (self.serpent_position_x, self.serpent_position_y, self.serpent_corps, self.serpent_corps))
-        self.ecran.blit(self.image_tete_serpent,(self.serpent_position_x,self.serpent_position_y,TAILLE_SERPENT,TAILLE_SERPENT))
+        self.ecran.blit(image_tete, (self.serpent_position_x,self.serpent_position_y,TAILLE_SERPENT,TAILLE_SERPENT))
         # afficher la pomme
         pygame.draw.rect(self.ecran, ROUGE, (self.pomme_position_x, self.pomme_position_y, TAILLE_POMME, TAILLE_POMME))
         self.afficher_serpent()
