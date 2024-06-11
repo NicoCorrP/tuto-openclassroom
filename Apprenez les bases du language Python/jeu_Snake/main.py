@@ -39,6 +39,7 @@ class Jeu:
         self.image_titre = pygame.transform.scale(self.image,(200,100))
         # fixer les fps
         self.clock = pygame.time.Clock()
+        self.reinitialiser_jeu()
 
         # charger le meilleur score
         self.meilleur_score = 0
@@ -117,10 +118,12 @@ class Jeu:
                     pygame.quit()
                     sys.exit()
 
-                if evenement.type == pygame.KEYDOWN:
-                    if evenement.key == pygame.K_RETURN:
-
+                if evenement.type == pygame.MOUSEBUTTONDOWN:
+                    if self.bouton_jouer.collidepoint(evenement.pos):
                         self.ecran_du_debut = False
+                    if evenement.key == pygame.KEYDOWN:
+                        if evenement.key == pygame.K_RETURN:
+                            self.ecran_du_debut = False
 
                 self. ecran.fill((0,0,0))
                 # methode d'affichage des images et textes
@@ -133,6 +136,11 @@ class Jeu:
                 self.creer_message('moyenne','Appuyer sur Enter pour commencer', (200, 450, 200, 5),
                                    (255, 255, 255))
                 
+                self.bouton_jouer = pygame.Rect(300, 400, 200, 50)
+                pygame.draw.rect(self.ecran, BLANC, self.bouton_jouer)
+                self.creer_message('moyenne', 'jouer', (350, 410, 100, 50), NOIR)
+
+
                 pygame.display.flip()
 
         while self.jeu_encours:
@@ -143,20 +151,45 @@ class Jeu:
                     self.jeu_encours = False
                     pygame.quit()
                     sys.exit()
+                if evenement.type == pygame.MOUSEBUTTONDOWN:
+                    if self.bouton_pause.collidepoint(evenement.pos):
+                        self.jeu_en_pause = not self.jeu_en_pause
+
+            if not self.jeu_en_pause:
+                self.mise_a_jour_jeu()
+            else:
+                self.afficher_pause()
+
+            self.afficher_les_elements()
+            self.afficher_score()
+            self.creer_limites()
+            self.ajuster_difficulte()
+
+            pygame.display.flip()
+
+            def afficher_pause(self):
+                self.creer_message('grande', 'Pause', (300, 250, 200, 50), (255, 255, 255))
+                self.bouton_reprendre = pygame.Rect(300, 320, 200, 50)
+                pygame.draw.rect(self.ecran, (255, 255, 255), self.bouton_reprendre)
+                self.creer_message('moyenne', 'Reprendre', (320, 330, 160, 30), (0, 0, 0))
+
+                self.bouton_arreter = pygame.Rect(300, 400, 200, 50)
+                pygame.draw.rect(self.ecran, (255, 255, 255), self.bouton_arreter)
+                self.creer_message('moyenne', 'Arrêter', (320, 410, 160, 30), (0, 0, 0))
 
             # faire bouger le serpent en appuyant sur les touches du clavier
             # et eviter qu'il ne se morde en revenant sur lui-même
-                if evenement.type == pygame.KEYDOWN:
+            if evenement.type == pygame.KEYDOWN:
                     if evenement.key == pygame.K_RIGHT and self.serpent_direction_x == 0:
                         self.serpent_direction_x = 10
                         self.serpent_direction_y = 0
-                elif evenement.key == pygame.K_LEFT and self.serpent_direction_x == 0:
+            elif evenement.key == pygame.K_LEFT and self.serpent_direction_x == 0:
                         self.serpent_direction_x = -10
                         self.serpent_direction_y = 0
-                elif evenement.key == pygame.K_DOWN and self.serpent_direction_y == 0:
+            elif evenement.key == pygame.K_DOWN and self.serpent_direction_y == 0:
                         self.serpent_direction_y = 10
                         self.serpent_direction_x = 0
-                elif evenement.key == pygame.K_UP and self.serpent_direction_y == 0:
+            elif evenement.key == pygame.K_UP and self.serpent_direction_y == 0:
                         self.serpent_direction_y = -10
                         self.serpent_direction_x = 0
 
