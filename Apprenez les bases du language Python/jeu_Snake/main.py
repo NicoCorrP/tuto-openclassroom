@@ -32,6 +32,7 @@ class Jeu:
         pygame.display.set_caption("Jeu Snake")
         self.jeu_encours = True
         self.ecran_du_debut = True
+        self.jeu_en_pause = False
         self.image_tete_serpent = pygame.image.load('la_tete_du_serpent.png')
         # charger l'image
         self.image = pygame.image.load('jeu-snake.jpg')
@@ -82,11 +83,17 @@ class Jeu:
 
         while self.jeu_encours:
             self.gerer_evenements()
-            self.mise_a_jour_jeu()
+            if not self.jeu_en_pause:
+                self.mise_a_jour_jeu()
+            else :
+                self.afficher_pause()
+
             self.afficher_les_elements()
             self.creer_limites()
             self.afficher_score()
             self.ajuster_difficulte()
+            pygame.display.flip()
+
         self.ecran_game_over()
 
     # fonction de reinitialisation des variables
@@ -107,27 +114,27 @@ class Jeu:
     def creer_limites(self):
         pygame.draw.rect(self.ecran, BLANC, LIMITES_JEU, 3)
 
-    def fonction_principale(self):
-        # permet de gérer les events, d'afficher certains composants du jeu grâce au while loop
-
-        while self.ecran_du_debut:
-            for evenement in pygame.event.get():
-            # pour permettre de fermer en appuyant sur la croix rouge
-                if evenement.type == pygame.QUIT:
-                    self.jeu_encours = False
-                    pygame.quit()
-                    sys.exit()
-
+    # permet de gérer les events, d'afficher certains composants du jeu grâce au while loop
+        def afficher_ecran_debut(self):
+            while self.ecran_du_debut:
+                for evenement in pygame.event.get():
+    # pour permettre de fermer en appuyant sur la croix rouge
+                    if evenement.type == pygame.QUIT:
+                        self.jeu_encours = False
+                        pygame.quit()
+                        sys.exit()
                 if evenement.type == pygame.MOUSEBUTTONDOWN:
                     if self.bouton_jouer.collidepoint(evenement.pos):
                         self.ecran_du_debut = False
-                    if evenement.key == pygame.KEYDOWN:
+                    elif self.bouton_aide.collidepoint(evenement.pos):
+                        self.afficher_aide()
+                    if evenement.type == pygame.KEYDOWN:
                         if evenement.key == pygame.K_RETURN:
                             self.ecran_du_debut = False
 
-                self. ecran.fill((0,0,0))
+                self. ecran.fill(NOIR)
                 # methode d'affichage des images et textes
-                self.ecran.blit(self.image_titre,(300,50,100,50))
+                self.ecran.blit(self.image_titre,(300,50))
                 # self.creer_message('petite','Snake',(300,300, 100,50), (255, 255, 255))
                 self.creer_message('petite','Le but du jeu est que le serpent se développe'
                                     ,(250, 200, 200, 5), (240, 240, 240))
@@ -139,7 +146,6 @@ class Jeu:
                 self.bouton_jouer = pygame.Rect(300, 400, 200, 50)
                 pygame.draw.rect(self.ecran, BLANC, self.bouton_jouer)
                 self.creer_message('moyenne', 'jouer', (350, 410, 100, 50), NOIR)
-
 
                 pygame.display.flip()
 
@@ -319,12 +325,17 @@ class Jeu:
             self.creer_message('grande', 'Game Over', (300, 200, 200, 50), ROUGE)
             self.creer_message('moyenne', 'Score: {}'.format(self.score), (350, 300, 100, 50), BLANC)
             self.creer_message('petite', 'Appuyer sur Enter pour recommencer ou Esc pour quitter', (200, 400, 400, 50), BLANC)
+
+            self.bouton_recommencer = pygame.Rect(300, 500, 200, 50)
+            pygame.draw.rect(self.ecran, (255, 255, 255), self.bouton_recommencer)
+            self.creer_message('moyenne', 'Recommencer', (320, 510, 160, 30), NOIR)
+
             pygame.display.flip()
 
             for evenement in pygame.event.get():
                 if evenement.type == pygame.QUIT:
                     pygame.quit()
-                    sys;exit()
+                    sys.exit()
                 if evenement.type == pygame.KEYDOWN:
                     if evenement.key == pygame.K_RETURN:
                         self.__init__()
@@ -332,6 +343,10 @@ class Jeu:
                     if evenement.key == pygame.K_ESCAPE:
                         pygame.quit()
                         sys.exit()
+                if evenement.type == pygame.MOUSEBUTTONDOWN:
+                    if self.bouton_recommencer.collidepoint(evenement.pos):
+                        self.__init__()
+                        self.fonction_principale()
 
 if __name__ == '__main__':
     Jeu().fonction_principale()
