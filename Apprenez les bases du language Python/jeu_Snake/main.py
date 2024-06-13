@@ -34,6 +34,10 @@ class Jeu:
         self.ecran_du_debut = True
         self.jeu_en_pause = False
         self.image_tete_serpent = pygame.image.load('la_tete_du_serpent.png')
+        # Ajoutez la possibilité d'avoir plusieurs pommes à l'écran en même temps
+        self.pommes = [(random.randrange(110, 690, 10), random.randrange(110, 590, 10)) for _ in range(3)]
+        # Ajoutez des obstacles fixes ou mobiles que le serpent doit éviter
+        self.obstacles = [(random.randrange(110, 690, 10), random.randrange(110, 590, 10)) for _ in range(5)]
         # charger l'image
         self.image = pygame.image.load('jeu-snake.jpg')
         # retrecir l'image
@@ -62,7 +66,7 @@ class Jeu:
         for evenement in pygame.event.get():
             if evenement.type == pygame.QUIT:
                 self.jeu_encours = False
-                pygame.quit()
+                pygame.quit() 
                 sys.exit()
             if evenement.type == pygame.KEYDOWN:
                 if evenement.key == pygame.K_RIGHT and self.serpent_direction_x == 0:
@@ -270,11 +274,27 @@ class Jeu:
             self.pomme_position_y = random.randrange(110, 590, 10)
             self.taille_du_serpent += 1
             self.score += 1
+        for pomme in self.pommes:
+            if self.serpent_position_x == pomme[0] and self.serpent_position_y == pomme[1]:
+                self.pommes.remove(pomme)
+                self.pommes.append((random.randrange(110, 690, 10), random.randrange(110, 590, 10)))
+                self.taille_du_serpent += 1
+                self.score += 1
+
         tete_serpent = [self.serpent_position_x, self.serpent_position_y]
         self.position_serpent.append(tete_serpent)
         if len(self.position_serpent) > self.taille_du_serpent:
             self.position_serpent.pop(0)
         self.se_mord(tete_serpent)
+# Ajoutez la possibilité d'avoir plusieurs pommes à l'écran en même temps
+    def afficher_les_elements(self):
+        self.ecran.fill(NOIR)
+        self.ecran.blit(self.image_tete_serpent, (self.serpent_position_x, self.serpent_position_y, self.serpent_corps, self.serpent_corps))
+        for obstacle in self.obstacles:
+            pygame.draw.rect(self.ecran, (0, 0, 255), (obstacle[0], obstacle[1], 10, 10))
+        for pomme in self.pommes:
+            pygame.draw.rect(self.ecran, (255, 0, 0), (pomme[0], pomme[1], self.pomme, self.pomme))
+        self.afficher_serpent()
 
     # afficher les autres parties du serpent
     def afficher_serpent(self):
@@ -285,6 +305,9 @@ class Jeu:
         # si le serpent se mord la queue alors le jeu s'arrête
         for partie_du_serpent in self.position_serpent[:-1]:
             if partie_du_serpent == tete_serpent:
+                self.jeu_encours = False
+        for obstacle in self.obstacles:
+            if obstacle == tete_serpent:
                 self.jeu_encours = False
 
     # creer une fonction qui permets l'affichage des
