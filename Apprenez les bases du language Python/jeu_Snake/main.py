@@ -44,17 +44,29 @@ class Jeu:
         self.image_titre = pygame.transform.scale(self.image,(200,100))
         # fixer les fps
         self.clock = pygame.time.Clock()
+        # ajout de niveaux
+        self.niveau_actuel = 1
         self.reinitialiser_jeu()
+        self.initialiser_niveau(self.niveau_actuel)
 
         # charger le meilleur score
         self.meilleur_score = 0
         self.charger_meilleur_score()
+
+    # init des premiers niveaux
+    def initialiser_niveau(self, niveau):
+        if niveau == 1:
+            self.obstacles = [(random.randrange(110, 690, 10), random.randrange(110, 590, 10)) for _ in range(5)]
+        elif niveau == 2:
+            self.obstacles = [(random.randrange(110, 690, 10), random.randrange(110, 590, 10)) for _ in range(10)]
+    # Ajoutez d'autres niveaux ici...
+
     
     def charger_meilleur_score(self):
         try: 
             with open('meilleur_score.txt', 'r') as file:
                 self.meilleur_score = int(file.read())
-        except:
+        except FileNotFoundError:
             self.meilleur_score = 0
 
     def enregistrer_meilleur_score(self):
@@ -268,6 +280,11 @@ class Jeu:
             if self.score > self.meilleur_score:
                 self.meilleur_score = self.score
                 self.enregistrer_meilleur_score()
+        elif self.score >= 10 and self.niveau_actuel == 1:
+            self.niveau_actuel += 1
+            self.initialiser_niveau(self.niveau_actuel)
+        # Ajoutez d'autres conditions de changement de niveau ici...
+
         self.serpent_mouvement()
         if self.pomme_position_y == self.serpent_position_y and self.serpent_position_x == self.pomme_position_x:
             self.pomme_position_x = random.randrange(110, 690, 10)
@@ -343,10 +360,16 @@ class Jeu:
             self.clock.tick(20)
 
     def ecran_game_over(self):
+        if self.score > self.meilleur_score:
+            self.meilleur_score = self.score
+            self.sauvegarder_meilleur_score()
+
+
         while not self.jeu_encours:
             self.ecran.fill(NOIR)
             self.creer_message('grande', 'Game Over', (300, 200, 200, 50), ROUGE)
             self.creer_message('moyenne', 'Score: {}'.format(self.score), (350, 300, 100, 50), BLANC)
+            self.creer_message('moyenne', 'Meilleur Score: {}'.format(self.meilleur_score), (350, 350, 100, 50), BLANC)
             self.creer_message('petite', 'Appuyer sur Enter pour recommencer ou Esc pour quitter', (200, 400, 400, 50), BLANC)
 
             self.bouton_recommencer = pygame.Rect(300, 500, 200, 50)
