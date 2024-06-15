@@ -42,6 +42,9 @@ class Jeu:
         self.image = pygame.image.load('jeu-snake.jpg')
         # retrecir l'image
         self.image_titre = pygame.transform.scale(self.image,(200,100))
+        # init des thèmes
+        self.theme_actuel = 'classique'
+        self.charger_themes()
         # fixer les fps
         self.clock = pygame.time.Clock()
         # ajout de niveaux
@@ -72,7 +75,24 @@ class Jeu:
     def enregistrer_meilleur_score(self):
         with open('meilleur_score.txt', 'w') as file:
             file.write(str(self.meilleur_score))
-        
+
+    def charger_themes(self):
+        self.themes = {
+            'classique': {
+                'serpent_couleur': (0, 255, 0),
+                'pomme_couleur': (255, 0, 0),
+                'arriere_plan': (0, 0, 0)
+            },
+            'neon': {
+                'serpent_couleur': (0, 255, 255),
+                'pomme_couleur': (255, 255, 0),
+                'arriere_plan': (50, 50, 50)
+            }
+        }
+    
+    def changer (self, nouveau_theme):
+        if nouveau_theme in self.themes:
+            self.theme_actuel = nouveau_theme
 
     def gerer_evenements(self):
         for evenement in pygame.event.get():
@@ -143,7 +163,10 @@ class Jeu:
                     if self.bouton_jouer.collidepoint(evenement.pos):
                         self.ecran_du_debut = False
                     elif self.bouton_aide.collidepoint(evenement.pos):
-                        self.afficher_aide()
+                        self.afficher_aide() 
+                        self.changer_theme('classique')
+                    elif self.bouton_neon.collidepoint(evenement.pos):
+                        self.changer_theme('neon')
                     if evenement.type == pygame.KEYDOWN:
                         if evenement.key == pygame.K_RETURN:
                             self.ecran_du_debut = False
@@ -154,8 +177,14 @@ class Jeu:
                 # self.creer_message('petite','Snake',(300,300, 100,50), (255, 255, 255))
                 self.creer_message('petite','Le but du jeu est que le serpent se développe'
                                     ,(250, 200, 200, 5), (240, 240, 240))
+                
+                self.bouton_classique = pygame.Rect(300, 350, 200, 50)
+                pygame.draw.rect(self.ecran, (255, 255, 255), self.bouton_classique)
                 self.creer_message('petite',' pour cela, il a besoin de pommes, mangez-en autants que possible, mais faites bien attention à ne pas vous mordre la queue !!',
                                    (190, 220, 200, 5), (240, 240, 240))
+                
+                self.bouton_neon = pygame.Rect(300, 420, 200, 50)
+                pygame.draw.rect(self.ecran, (255, 255, 255), self.bouton_neon)
                 self.creer_message('moyenne','Appuyer sur Enter pour commencer', (200, 450, 200, 5),
                                    (255, 255, 255))
                 
@@ -305,12 +334,13 @@ class Jeu:
         self.se_mord(tete_serpent)
 # Ajoutez la possibilité d'avoir plusieurs pommes à l'écran en même temps
     def afficher_les_elements(self):
-        self.ecran.fill(NOIR)
-        self.ecran.blit(self.image_tete_serpent, (self.serpent_position_x, self.serpent_position_y, self.serpent_corps, self.serpent_corps))
+        theme = self.themes[self.theme_actuel]
+        self.ecran.fill(theme['arriere_plan'])
+        pygame.draw.rect(self.ecran, theme['serpent_couleur'], (self.serpent_position_x, self.serpent_position_y, self.serpent_corps, self.serpent_corps))
         for obstacle in self.obstacles:
             pygame.draw.rect(self.ecran, (0, 0, 255), (obstacle[0], obstacle[1], 10, 10))
         for pomme in self.pommes:
-            pygame.draw.rect(self.ecran, (255, 0, 0), (pomme[0], pomme[1], self.pomme, self.pomme))
+            pygame.draw.rect(self.ecran, theme['pomme_couleur'], (pomme[0], pomme[1], self.pomme, self.pomme))
         self.afficher_serpent()
 
     # afficher les autres parties du serpent
