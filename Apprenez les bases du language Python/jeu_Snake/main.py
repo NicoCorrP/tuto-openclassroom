@@ -64,6 +64,41 @@ class Jeu:
             self.obstacles = [(random.randrange(110, 690, 10), random.randrange(110, 590, 10)) for _ in range(10)]
     # Ajoutez d'autres niveaux ici...
 
+    # Initialisation des autres attributs
+        self.serpent2_position_x = 400
+        self.serpent2_position_y = 300
+        self.direction_serpent2 = 'GAUCHE'
+        self.taille_du_serpent2 = 1
+        self.position_serpent2 = []
+        # Autres initialisations...
+
+    def controle_serpent2(self, evenement):
+        if evenement.key == pygame.K_a and self.direction_serpent2 != 'DROITE':
+            self.direction_serpent2 = 'GAUCHE'
+        if evenement.key == pygame.K_d and self.direction_serpent2 != 'GAUCHE':
+            self.direction_serpent2 = 'DROITE'
+        if evenement.key == pygame.K_w and self.direction_serpent2 != 'BAS':
+            self.direction_serpent2 = 'HAUT'
+        if evenement.key == pygame.K_s and self.direction_serpent2 != 'HAUT':
+            self.direction_serpent2 = 'BAS'
+
+    def mise_a_jour_jeu(self):
+        # Maj position du deuxième serpent
+        if self.direction_serpent2 == 'HAUT':
+            self.serpent2_position_y -= 10
+        if self.direction_serpent2 == 'BAS':
+            self.serpent2_position_y += 10
+        if self.direction_serpent2 == 'GAUCHE':
+            self.serpent2_position_x -= 10
+        if self.direction_serpent2 == 'DROITE':
+            self.serpent2_position_x += 10
+
+        tete_serpent2 = [self.serpent2_position_x, self.serpent2_position_y]
+        self.position_serpent2.append(tete_serpent2)
+        if len(self.position_serpent2) > self.taille_du_serpent2:
+            self.position_serpent2.pop(0)
+        self.se_mord(tete_serpent2, self.position_serpent2)
+
     
     def charger_meilleur_score(self):
         try: 
@@ -303,6 +338,10 @@ class Jeu:
         pygame.draw.rect(self.ecran, ROUGE, (self.pomme_position_x, self.pomme_position_y, TAILLE_POMME, TAILLE_POMME))
         self.afficher_serpent()
 
+         # Affichage du deuxième serpent
+        for segment in self.position_serpent2:
+            pygame.draw.rect(self.ecran, (0, 0, 255), (segment[0], segment[1], self.serpent_corps, self.serpent_corps))
+
     def mise_a_jour_jeu(self):
         if self.serpent_position_x < 100 or self.serpent_position_x >= 700 or self.serpent_position_y < 100 or self.serpent_position_y >= 600:
             self.jeu_encours = False
@@ -348,13 +387,25 @@ class Jeu:
         for partie_du_serpent in self.position_serpent[:-1]:
             pygame.draw.rect(self.ecran, (0, 255, 0), (partie_du_serpent[0], partie_du_serpent[1], self.serpent_corps, self.serpent_corps))
 
-    def se_mord(self, tete_serpent):
+    def se_mord(self, tete_serpent, positions_serpent):
         # si le serpent se mord la queue alors le jeu s'arrête
         for partie_du_serpent in self.position_serpent[:-1]:
             if partie_du_serpent == tete_serpent:
                 self.jeu_encours = False
         for obstacle in self.obstacles:
             if obstacle == tete_serpent:
+                self.jeu_encours = False
+
+        for obstacle in self.obstacles:
+            if obstacle == tete_serpent:
+                self.jeu_encours = False
+
+        for partie_serpent1 in self.position_serpent:
+            if tete_serpent == partie_serpent1:
+                self.jeu_encours = False
+
+        for partie_serpent2 in self.position_serpent2:
+            if tete_serpent == partie_serpent2:
                 self.jeu_encours = False
 
     # creer une fonction qui permets l'affichage des
