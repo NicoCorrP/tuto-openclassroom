@@ -52,6 +52,10 @@ class Jeu:
         self.reinitialiser_jeu()
         self.initialiser_niveau(self.niveau_actuel)
 
+        # ajout de bonus 
+        self.bonus = (random.randrange(110, 690, 10), random.randrange(110, 590, 10))
+        self.malus = (random.randrange(110, 690, 10), random.randrange(110, 590, 10))
+
         # charger le meilleur score
         self.meilleur_score = 0
         self.charger_meilleur_score()
@@ -371,6 +375,19 @@ class Jeu:
         if len(self.position_serpent) > self.taille_du_serpent:
             self.position_serpent.pop(0)
         self.se_mord(tete_serpent)
+
+    # Vérification des collisions avec le bonus
+        if self.serpent_position_x == self.bonus[0] and self.serpent_position_y == self.bonus[1]:
+            self.bonus = (random.randrange(110, 690, 10), random.randrange(110, 590, 10))
+            self.taille_du_serpent += 2
+            self.score += 3
+
+        # Vérification des collisions avec le malus
+        if self.serpent_position_x == self.malus[0] and self.serpent_position_y == self.malus[1]:
+            self.malus = (random.randrange(110, 690, 10), random.randrange(110, 590, 10))
+            self.taille_du_serpent -= 1
+            self.score -= 2
+
 # Ajoutez la possibilité d'avoir plusieurs pommes à l'écran en même temps
     def afficher_les_elements(self):
         theme = self.themes[self.theme_actuel]
