@@ -56,6 +56,10 @@ class Jeu:
         self.bonus = (random.randrange(110, 690, 10), random.randrange(110, 590, 10))
         self.malus = (random.randrange(110, 690, 10), random.randrange(110, 590, 10))
 
+        # ajout d'un mode turbo
+        self.turbo_actif = False
+        self.turbo_duree = 0
+
         # charger le meilleur score
         self.meilleur_score = 0
         self.charger_meilleur_score()
@@ -85,6 +89,13 @@ class Jeu:
             self.direction_serpent2 = 'HAUT'
         if evenement.key == pygame.K_s and self.direction_serpent2 != 'HAUT':
             self.direction_serpent2 = 'BAS'
+
+
+    def activer_turbo(self):
+        if not self.turbo_actif:
+            self.turbo_actif = True
+            # Nombre de cycles de jeu en mode turbo
+            self.turbo_duree = 50 
 
     def mise_a_jour_jeu(self):
         # Maj position du deuxième serpent
@@ -357,6 +368,15 @@ class Jeu:
             self.initialiser_niveau(self.niveau_actuel)
         # Ajoutez d'autres conditions de changement de niveau ici...
 
+    # Mise à jour de la vitesse
+        if self.turbo_actif:
+            self.clock.tick(30)
+            self.turbo_duree -= 1
+            if self.turbo_duree <= 0:
+                self.turbo_actif = False
+        else:
+            self.clock.tick(10)
+
         self.serpent_mouvement()
         if self.pomme_position_y == self.serpent_position_y and self.serpent_position_x == self.pomme_position_x:
             self.pomme_position_x = random.randrange(110, 690, 10)
@@ -375,6 +395,8 @@ class Jeu:
         if len(self.position_serpent) > self.taille_du_serpent:
             self.position_serpent.pop(0)
         self.se_mord(tete_serpent)
+
+
 
     # Vérification des collisions avec le bonus
         if self.serpent_position_x == self.bonus[0] and self.serpent_position_y == self.bonus[1]:
@@ -398,6 +420,9 @@ class Jeu:
         for pomme in self.pommes:
             pygame.draw.rect(self.ecran, theme['pomme_couleur'], (pomme[0], pomme[1], self.pomme, self.pomme))
         self.afficher_serpent()
+
+        if self.turbo_actif:
+            self.creer_message('moyenne', 'Turbo!', (10, 90, 100, 50), (255, 255, 0))
 
     # afficher les autres parties du serpent
     def afficher_serpent(self):
