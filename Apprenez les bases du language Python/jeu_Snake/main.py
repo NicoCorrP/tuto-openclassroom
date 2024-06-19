@@ -60,6 +60,10 @@ class Jeu:
         self.turbo_actif = False
         self.turbo_duree = 0
 
+        # ajout d'un mode de difficulté invisible
+        self.invisible_actif = False
+        self.invisible_duree = 0
+
         # charger le meilleur score
         self.meilleur_score = 0
         self.charger_meilleur_score()
@@ -96,6 +100,12 @@ class Jeu:
             self.turbo_actif = True
             # Nombre de cycles de jeu en mode turbo
             self.turbo_duree = 50 
+
+    def activer_invisibilite(self):
+        if not self.invisible_actif:
+            self.invisible_actif = True
+            # Nombre de cycles de jeu en mode invisible
+            self.invisible_duree = 50 
 
     def mise_a_jour_jeu(self):
         # Maj position du deuxième serpent
@@ -368,15 +378,6 @@ class Jeu:
             self.initialiser_niveau(self.niveau_actuel)
         # Ajoutez d'autres conditions de changement de niveau ici...
 
-    # Mise à jour de la vitesse
-        if self.turbo_actif:
-            self.clock.tick(30)
-            self.turbo_duree -= 1
-            if self.turbo_duree <= 0:
-                self.turbo_actif = False
-        else:
-            self.clock.tick(10)
-
         self.serpent_mouvement()
         if self.pomme_position_y == self.serpent_position_y and self.serpent_position_x == self.pomme_position_x:
             self.pomme_position_x = random.randrange(110, 690, 10)
@@ -396,7 +397,20 @@ class Jeu:
             self.position_serpent.pop(0)
         self.se_mord(tete_serpent)
 
+        # Mise à jour de la vitesse
+        if self.turbo_actif:
+            self.clock.tick(30)
+            self.turbo_duree -= 1
+            if self.turbo_duree <= 0:
+                self.turbo_actif = False
+        else:
+            self.clock.tick(10)
 
+        # mise à jour de la visibilité du serpent
+        if self.invisible_actif:
+            self.invisible_duree -= 1
+            if self.invisible_duree <= 0:
+                self.invisible_actif = False
 
     # Vérification des collisions avec le bonus
         if self.serpent_position_x == self.bonus[0] and self.serpent_position_y == self.bonus[1]:
