@@ -64,6 +64,11 @@ class Jeu:
         self.invisible_actif = False
         self.invisible_duree = 0
 
+        # ajout de pouvoirs pour le serpent
+        self.pouvoir_traverser_murs = False
+        self.pouvoir_teleportation = False
+        self.pouvoir_bouclier = False
+
         # charger le meilleur score
         self.meilleur_score = 0
         self.charger_meilleur_score()
@@ -76,13 +81,11 @@ class Jeu:
             self.obstacles = [(random.randrange(110, 690, 10), random.randrange(110, 590, 10)) for _ in range(10)]
     # Ajoutez d'autres niveaux ici...
 
-    # Initialisation des autres attributs
         self.serpent2_position_x = 400
         self.serpent2_position_y = 300
         self.direction_serpent2 = 'GAUCHE'
         self.taille_du_serpent2 = 1
         self.position_serpent2 = []
-        # Autres initialisations...
 
     def controle_serpent2(self, evenement):
         if evenement.key == pygame.K_a and self.direction_serpent2 != 'DROITE':
@@ -106,6 +109,27 @@ class Jeu:
             self.invisible_actif = True
             # Nombre de cycles de jeu en mode invisible
             self.invisible_duree = 50 
+
+    # permet l'activation des pouvoirs du serpent
+    def controle(self, evenement):
+        if evenement.key == pygame.K_m:
+            self.activer_pouvoir_traverser_murs()
+        if evenement.key == pygame.K_p:
+            self.activer_teleportation()
+        if evenement.key == pygame.K_b:
+            self.activer_bouclier()
+
+    def activer_pouvoir_traverser_murs(self):
+        self.pouvoir_traverser_murs = True
+
+    def activer_teleportation(self):
+        self.serpent_position_x = random.randrange(110, 690, 10)
+        self.serpent_position_y = random.randrange(110, 590, 10)
+
+    def activer_bouclier(self):
+        self.pouvoir_bouclier = True
+        # Nombre de cycles de jeu avec le bouclier
+        self.bouclier_duree = 50 
 
     def mise_a_jour_jeu(self):
         # Maj position du deuxième serpent
@@ -376,6 +400,21 @@ class Jeu:
         elif self.score >= 10 and self.niveau_actuel == 1:
             self.niveau_actuel += 1
             self.initialiser_niveau(self.niveau_actuel)
+        
+        if self.pouvoir_bouclier:
+            self.bouclier_duree -= 1
+            if self.bouclier_duree <= 0:
+                self.pouvoir_bouclier = False
+
+        if self.pouvoir_traverser_murs:
+            if self.serpent_position_x < 110:
+                self.serpent_position_x = 690
+            elif self.serpent_position_x > 690:
+                self.serpent_position_x = 110
+            elif self.serpent_position_y < 110:
+                self.serpent_position_y = 590
+            elif self.serpent_position_y > 590:
+                self.serpent_position_y = 110
         # Ajoutez d'autres conditions de changement de niveau ici...
 
         self.serpent_mouvement()
@@ -446,14 +485,11 @@ class Jeu:
     def se_mord(self, tete_serpent, positions_serpent):
         # si le serpent se mord la queue alors le jeu s'arrête
         for partie_du_serpent in self.position_serpent[:-1]:
-            if partie_du_serpent == tete_serpent:
-                self.jeu_encours = False
-        for obstacle in self.obstacles:
-            if obstacle == tete_serpent:
+            if partie_du_serpent == tete_serpent and not self.pouvoir_bouclier:
                 self.jeu_encours = False
 
         for obstacle in self.obstacles:
-            if obstacle == tete_serpent:
+            if obstacle == tete_serpent and not self.pouvoir_bouclier:
                 self.jeu_encours = False
 
         for partie_serpent1 in self.position_serpent:
