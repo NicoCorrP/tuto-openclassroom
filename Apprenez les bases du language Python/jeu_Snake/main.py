@@ -69,6 +69,11 @@ class Jeu:
         self.pouvoir_teleportation = False
         self.pouvoir_bouclier = False
 
+        # ajout d'un mode chronométré
+        # 60 secondes pour le mode chronométré
+        self.temps_restant = 60  
+        self.compteur_temps = pygame.time.get_ticks()
+
         # charger le meilleur score
         self.meilleur_score = 0
         self.charger_meilleur_score()
@@ -415,6 +420,14 @@ class Jeu:
                 self.serpent_position_y = 590
             elif self.serpent_position_y > 590:
                 self.serpent_position_y = 110
+
+        temps_actuel = pygame.time.get_ticks()
+        if temps_actuel - self.compteur_temps >= 1000:
+            self.temps_restant -= 1
+            self.compteur_temps = temps_actuel
+        if self.temps_restant <= 0:
+            self.jeu_encours = False
+            self.ecran_game_over()
         # Ajoutez d'autres conditions de changement de niveau ici...
 
         self.serpent_mouvement()
@@ -476,6 +489,8 @@ class Jeu:
 
         if self.turbo_actif:
             self.creer_message('moyenne', 'Turbo!', (10, 90, 100, 50), (255, 255, 0))
+        self.ecran.fill(NOIR)
+        self.creer_message('moyenne', 'Temps restant: {}'.format(self.temps_restant), (10, 10, 200, 50), BLANC)
 
     # afficher les autres parties du serpent
     def afficher_serpent(self):
