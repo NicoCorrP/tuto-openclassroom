@@ -52,6 +52,9 @@ class Jeu:
         self.reinitialiser_jeu()
         self.initialiser_niveau(self.niveau_actuel)
 
+        # ajout d'un mode entrainement
+        self.mode_entrainement = False
+
         # ajout de bonus 
         self.bonus = (random.randrange(110, 690, 10), random.randrange(110, 590, 10))
         self.malus = (random.randrange(110, 690, 10), random.randrange(110, 590, 10))
@@ -101,6 +104,10 @@ class Jeu:
             self.direction_serpent2 = 'HAUT'
         if evenement.key == pygame.K_s and self.direction_serpent2 != 'HAUT':
             self.direction_serpent2 = 'BAS'
+
+    def controle(self, evenement):
+        if evenement.key == pygame.K_e:
+            self.mode_entrainement = not self.mode_entrainement
 
 
     def activer_turbo(self):
@@ -385,7 +392,11 @@ class Jeu:
             image_tete = pygame.transform.rotate(self.image_tete_serpent, 180)
         else:
             image_tete = self.image_tete_serpent
-        # afficher le serpent
+        
+        self.ecran.fill((0, 0, 0))
+        if self.mode_entrainement:
+            self.creer_message('moyenne', 'Mode Entraînement', (10, 90, 200, 50), (0, 255, 0))
+            
         # pygame.draw.rect(self.ecran, (0, 255, 0), (self.serpent_position_x, self.serpent_position_y, self.serpent_corps, self.serpent_corps))
         self.ecran.blit(image_tete, (self.serpent_position_x,self.serpent_position_y,TAILLE_SERPENT,TAILLE_SERPENT))
         # afficher la pomme
@@ -502,6 +513,12 @@ class Jeu:
         for partie_du_serpent in self.position_serpent[:-1]:
             if partie_du_serpent == tete_serpent and not self.pouvoir_bouclier:
                 self.jeu_encours = False
+
+        if not self.mode_entrainement:
+            # Normalement, le jeu se termine si une collision se produit
+            for obstacle in self.obstacles:
+                if obstacle == [self.serpent_position_x, self.serpent_position_y]:
+                    self.jeu_encours = False
 
         for obstacle in self.obstacles:
             if obstacle == tete_serpent and not self.pouvoir_bouclier:
