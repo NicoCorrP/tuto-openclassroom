@@ -19,6 +19,63 @@ TAILLE_POMME = 10
 POSITION_INITIALE_SERPENT = (300, 300)
 LIMITES_JEU = (100, 100, 600, 500)
 
+import random
+
+class SerpentIA:
+    def __init__(self, position_initiale, direction_initiale):
+        self.position = position_initiale
+        self.direction = direction_initiale
+        self.corps = [self.position]
+        self.longueur = 3  # Taille initiale du serpent
+
+    def mise_a_jour(self, pommes, obstacles):
+        self.choisir_direction(pommes, obstacles)
+        self.deplacer()
+
+    def choisir_direction(self, pommes, obstacles):
+        # Logique basique pour changer de direction de manière aléatoire, mais vous pouvez
+        # améliorer cette logique pour une IA plus intelligente
+        directions_possibles = ['HAUT', 'BAS', 'GAUCHE', 'DROITE']
+        directions_opposées = {'HAUT': 'BAS', 'BAS': 'HAUT', 'GAUCHE': 'DROITE', 'DROITE': 'GAUCHE'}
+        
+        # Enlever la direction opposée pour éviter de revenir sur soi-même
+        directions_possibles.remove(directions_opposées[self.direction])
+        
+        # Si un obstacle est détecté dans la direction actuelle, changer de direction
+        nouvelle_direction = random.choice(directions_possibles)
+        for direction in directions_possibles:
+            prochaine_position = list(self.position)
+            if direction == 'HAUT':
+                prochaine_position[1] -= 10
+            elif direction == 'BAS':
+                prochaine_position[1] += 10
+            elif direction == 'GAUCHE':
+                prochaine_position[0] -= 10
+            elif direction == 'DROITE':
+                prochaine_position[0] += 10
+            
+            if prochaine_position not in obstacles and prochaine_position not in self.corps:
+                nouvelle_direction = direction
+                break
+        
+        self.direction = nouvelle_direction
+
+    def deplacer(self):
+        if self.direction == 'HAUT':
+            self.position[1] -= 10
+        elif self.direction == 'BAS':
+            self.position[1] += 10
+        elif self.direction == 'GAUCHE':
+            self.position[0] -= 10
+        elif self.direction == 'DROITE':
+            self.position[0] += 10
+        
+        self.corps.append(list(self.position))
+        if len(self.corps) > self.longueur:
+            self.corps.pop(0)
+
+    def grandir(self):
+        self.longueur += 1
 
 class Jeu:
     # contenir toutes les variables et fonctions utiles au jeu
@@ -26,8 +83,11 @@ class Jeu:
     def __init__(self):
         # initialisation de tous les modules de Pygame
         pygame.init()
+        self.taille_element = 20
+        self.taille_ecran = 400
         # on définit les dimensions de la fenêtre de jeu
         self.ecran = pygame.display.set_mode((LARGEUR_ECRAN, HAUTEUR_ECRAN))
+        self.surface = pygame.display.set_mode((self.taille_ecran, self.taille_ecran))
         # puis on lui donne un titre
         pygame.display.set_caption("Jeu Snake")
         self.jeu_encours = True
@@ -51,6 +111,9 @@ class Jeu:
         self.niveau_actuel = 1
         self.reinitialiser_jeu()
         self.initialiser_niveau(self.niveau_actuel)
+
+        # ajout de serpents autonomes via IA
+        self.serpents_ia = [SerpentIA([random.randrange(110, 690, 10), random.randrange(110, 590, 10)], random.choice(['HAUT', 'BAS', 'GAUCHE', 'DROITE'])) for _ in range(3)]
 
         # ajout d'un mode entrainement
         self.mode_entrainement = False
@@ -158,7 +221,6 @@ class Jeu:
         self.position_serpent2.append(tete_serpent2)
         if len(self.position_serpent2) > self.taille_du_serpent2:
             self.position_serpent2.pop(0)
-        self.se_mord(tete_serpent2, self.position_serpent2)
 
     
     def charger_meilleur_score(self):
@@ -185,10 +247,34 @@ class Jeu:
                 'arriere_plan': (50, 50, 50)
             }
         }
+        self.theme_actuel = self.themes['classique']
     
     def changer (self, nouveau_theme):
         if nouveau_theme in self.themes:
             self.theme_actuel = nouveau_theme
+
+    def afficher_ecran_debut(self):
+        self.surface.fill(self.theme_actuel['fond_couleur'])
+        police = pygame.font.Font(None, 74)
+        texte = police.render('Snake Game', True, (255, 255, 255))
+        rect_texte = texte.get_rect(center=(self.taille_ecran // 2, self.taille_ecran // 2))
+        self.surface.blit(texte, rect_texte)
+        pygame.display.flip()
+        self.attendre_touche()
+
+    def attendre_touche(self):
+        attendre = True
+        while attendre:
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN:
+                    attendre = False
+                elif event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
+
+    def boucle_principale(self):
+        self.afficher_ecran_debut()
+        # Reste du code pour la boucle principale du jeu...
 
     def gerer_evenements(self):
         for evenement in pygame.event.get():
@@ -396,7 +482,24 @@ class Jeu:
         self.ecran.fill((0, 0, 0))
         if self.mode_entrainement:
             self.creer_message('moyenne', 'Mode Entraînement', (10, 90, 200, 50), (0, 255, 0))
-            
+
+        self.ecran.fill((0, 0, 0))
+        # Affichage des pommes
+        for pomme in self.pommes:
+            pygame.draw.rect(self.ecran, (255, 0, 0), (pomme[0], pomme[1], self.pomme, self.pomme))
+        
+        # Affichage du serpent du joueur
+        for segment in self.position_serpent:
+            pygame.draw.rect(self.ecran, (0, 255, 0), (segment[0], segment[1], self.serpent_corps, self.serpent_corps))
+        
+        # Affichage des serpents IA
+        for serpent_ia in self.serpents_ia:
+            for segment in serpent_ia.corps:
+                pygame.draw.rect(self.ecran, (0, 0, 255), (segment[0], segment[1], self.serpent_corps, self.serpent_corps))
+        
+        self.afficher_serpent()
+        pygame.display.flip()
+
         # pygame.draw.rect(self.ecran, (0, 255, 0), (self.serpent_position_x, self.serpent_position_y, self.serpent_corps, self.serpent_corps))
         self.ecran.blit(image_tete, (self.serpent_position_x,self.serpent_position_y,TAILLE_SERPENT,TAILLE_SERPENT))
         # afficher la pomme
@@ -453,6 +556,16 @@ class Jeu:
                 self.pommes.append((random.randrange(110, 690, 10), random.randrange(110, 590, 10)))
                 self.taille_du_serpent += 1
                 self.score += 1
+        # Mise à jour des serpents IA
+        for serpent_ia in self.serpents_ia:
+            serpent_ia.mise_a_jour(self.pommes, self.obstacles)
+
+        # Vérification des collisions entre les serpents IA et les pommes
+        for serpent_ia in self.serpents_ia:
+            if [serpent_ia.position[0], serpent_ia.position[1]] in self.pommes:
+                self.pommes.remove([serpent_ia.position[0], serpent_ia.position[1]])
+                self.pommes.append([random.randrange(110, 690, 10), random.randrange(110, 590, 10)])
+                serpent_ia.grandir()
 
         tete_serpent = [self.serpent_position_x, self.serpent_position_y]
         self.position_serpent.append(tete_serpent)
@@ -598,6 +711,8 @@ class Jeu:
                     if self.bouton_recommencer.collidepoint(evenement.pos):
                         self.__init__()
                         self.fonction_principale()
+
+
 
 if __name__ == '__main__':
     Jeu().fonction_principale()
