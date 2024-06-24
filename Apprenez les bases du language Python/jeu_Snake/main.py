@@ -111,35 +111,29 @@ class Jeu:
         self.niveau_actuel = 1
         self.reinitialiser_jeu()
         self.initialiser_niveau(self.niveau_actuel)
-
+        # ajout de succès
+        self.succes = {'mangeur_rapide': False, 'long_serpent': False}
         # ajout de serpents autonomes via IA
         self.serpents_ia = [SerpentIA([random.randrange(110, 690, 10), random.randrange(110, 590, 10)], random.choice(['HAUT', 'BAS', 'GAUCHE', 'DROITE'])) for _ in range(3)]
-
         # ajout d'un mode entrainement
         self.mode_entrainement = False
-
         # ajout de bonus 
         self.bonus = (random.randrange(110, 690, 10), random.randrange(110, 590, 10))
         self.malus = (random.randrange(110, 690, 10), random.randrange(110, 590, 10))
-
         # ajout d'un mode turbo
         self.turbo_actif = False
         self.turbo_duree = 0
-
         # ajout d'un mode de difficulté invisible
         self.invisible_actif = False
         self.invisible_duree = 0
-
         # ajout de pouvoirs pour le serpent
         self.pouvoir_traverser_murs = False
         self.pouvoir_teleportation = False
         self.pouvoir_bouclier = False
-
         # ajout d'un mode chronométré
         # 60 secondes pour le mode chronométré
         self.temps_restant = 60  
         self.compteur_temps = pygame.time.get_ticks()
-
         # charger le meilleur score
         self.meilleur_score = 0
         self.charger_meilleur_score()
@@ -172,6 +166,17 @@ class Jeu:
         if evenement.key == pygame.K_e:
             self.mode_entrainement = not self.mode_entrainement
 
+    def verifier_succes(self):
+        if self.score >= 50 and not self.succes['mangeur_rapide']:
+            self.succes['mangeur_rapide'] = True
+            self.afficher_message_succes('Mangeur Rapide!')
+
+        if self.taille_du_serpent >= 20 and not self.succes['long_serpent']:
+            self.succes['long_serpent'] = True
+            self.afficher_message_succes('Long Serpent!')
+
+    def afficher_message_succes(self, message):
+        print(f"Succès débloqué: {message}")
 
     def activer_turbo(self):
         if not self.turbo_actif:
@@ -519,6 +524,7 @@ class Jeu:
         elif self.score >= 10 and self.niveau_actuel == 1:
             self.niveau_actuel += 1
             self.initialiser_niveau(self.niveau_actuel)
+
         
         if self.pouvoir_bouclier:
             self.bouclier_duree -= 1
@@ -542,6 +548,7 @@ class Jeu:
         if self.temps_restant <= 0:
             self.jeu_encours = False
             self.ecran_game_over()
+        self.verifier_succes()
         # Ajoutez d'autres conditions de changement de niveau ici...
 
         self.serpent_mouvement()
