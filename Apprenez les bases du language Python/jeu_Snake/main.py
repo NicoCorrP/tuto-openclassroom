@@ -77,6 +77,11 @@ class SerpentIA:
     def grandir(self):
         self.longueur += 1
 
+class Niveau:
+    def __init__(self, obstacles, pommes):
+        self.obstacles = obstacles
+        self.pommes = pommes
+
 class Jeu:
     # contenir toutes les variables et fonctions utiles au jeu
 
@@ -134,6 +139,12 @@ class Jeu:
         # 60 secondes pour le mode chronométré
         self.temps_restant = 60  
         self.compteur_temps = pygame.time.get_ticks()
+        # ajout d'un mode aventure
+        self.niveaux = [
+            Niveau([(150, 150), (200, 150)], [(300, 300)]),
+            Niveau([(150, 150), (200, 150), (250, 150)], [(400, 400)])
+        ]
+        self.niveau_actuel = 0
         # charger le meilleur score
         self.meilleur_score = 0
         self.charger_meilleur_score()
@@ -492,6 +503,12 @@ class Jeu:
         # Affichage des pommes
         for pomme in self.pommes:
             pygame.draw.rect(self.ecran, (255, 0, 0), (pomme[0], pomme[1], self.pomme, self.pomme))
+
+        for obstacle in self.obstacles:
+            pygame.draw.rect(self.ecran, (0, 0, 255), (obstacle[0], obstacle[1], 10, 10))
+        for pomme in self.pommes:
+            pygame.draw.rect(self.ecran, (255, 0, 0), (pomme[0], pomme[1], 10, 10))
+        self.afficher_serpent()
         
         # Affichage du serpent du joueur
         for segment in self.position_serpent:
@@ -548,6 +565,14 @@ class Jeu:
         if self.temps_restant <= 0:
             self.jeu_encours = False
             self.ecran_game_over()
+        if self.niveau_complete():
+            self.niveau_actuel += 1
+            if self.niveau_actuel >= len(self.niveaux):
+                self.jeu_encours = False  
+            # Tous les niveaux sont complétés
+            else:
+                self.charger_niveau(self.niveaux[self.niveau_actuel])
+                
         self.verifier_succes()
         # Ajoutez d'autres conditions de changement de niveau ici...
 
@@ -606,6 +631,13 @@ class Jeu:
             self.malus = (random.randrange(110, 690, 10), random.randrange(110, 590, 10))
             self.taille_du_serpent -= 1
             self.score -= 2
+    
+    def niveau_complete(self):
+        return not self.pommes
+    
+    def charger_niveau(self, niveau):
+        self.obstacles = niveau.obstacles
+        self.pommes = niveau.pommes
 
 # Ajoutez la possibilité d'avoir plusieurs pommes à l'écran en même temps
     def afficher_les_elements(self):
