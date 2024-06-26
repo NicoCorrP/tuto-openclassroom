@@ -125,6 +125,9 @@ class Jeu:
         # ajout de bonus 
         self.bonus = (random.randrange(110, 690, 10), random.randrange(110, 590, 10))
         self.malus = (random.randrange(110, 690, 10), random.randrange(110, 590, 10))
+        # ajout de bonus supplémentaires lors d'actions spéciales/combos
+        self.combo_counter = 0
+        self.combo_timer = 0
         # ajout d'un mode turbo
         self.turbo_actif = False
         self.turbo_duree = 0
@@ -558,6 +561,20 @@ class Jeu:
             elif self.serpent_position_y > 590:
                 self.serpent_position_y = 110
 
+        if self.combo_timer > 0:
+            self.combo_timer -= 1
+        else:
+            self.combo_counter = 0
+
+        if self.serpent_position_x == self.pomme_x and self.serpent_position_y == self.pomme_y:
+            self.pomme_mangee()
+            self.combo_counter += 1
+            # 30 cycles nécéssaires pour maintenir le combo
+            self.combo_timer = 30  
+            if self.combo_counter > 1:
+                # Bonus pour les combos
+                self.score += 10 * self.combo_counter 
+
         temps_actuel = pygame.time.get_ticks()
         if temps_actuel - self.compteur_temps >= 1000:
             self.temps_restant -= 1
@@ -638,6 +655,10 @@ class Jeu:
     def charger_niveau(self, niveau):
         self.obstacles = niveau.obstacles
         self.pommes = niveau.pommes
+    
+    def pomme_mangee(self):
+        # Code pour gérer la pomme mangée
+        pass
 
 # Ajoutez la possibilité d'avoir plusieurs pommes à l'écran en même temps
     def afficher_les_elements(self):
