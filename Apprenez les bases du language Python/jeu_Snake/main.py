@@ -21,6 +21,25 @@ LIMITES_JEU = (100, 100, 600, 500)
 
 import random
 
+class Ennemi:
+    def __init__(self, position_initiale):
+        self.position = position_initiale
+        self.direction = random.choice(['HAUT', 'BAS', 'GAUCHE', 'DROITE'])
+
+    def mise_a_jour(self):
+        if self.direction == 'HAUT':
+            self.position[1] -= 10
+        elif self.direction == 'BAS':
+            self.position[1] += 10
+        elif self.direction == 'GAUCHE':
+            self.position[0] -= 10
+        elif self.direction == 'DROITE':
+            self.position[0] += 10
+
+        # Changer de direction aléatoirement
+        if random.random() < 0.1:
+            self.direction = random.choice(['HAUT', 'BAS', 'GAUCHE', 'DROITE'])
+
 class SerpentIA:
     def __init__(self, position_initiale, direction_initiale):
         self.position = position_initiale
@@ -148,6 +167,13 @@ class Jeu:
             Niveau([(150, 150), (200, 150), (250, 150)], [(400, 400)])
         ]
         self.niveau_actuel = 0
+        # personnalisation du serpent
+        self.couleur_serpent = (0, 255, 0)
+        self.motif_serpent = 'uni'
+
+        # ajout de serpents ennemis
+        self.ennemis = [Ennemi([random.randrange(110, 690, 10), random.randrange(110, 590, 10)]) for _ in range(3)]
+
         # charger le meilleur score
         self.meilleur_score = 0
         self.charger_meilleur_score()
@@ -224,6 +250,10 @@ class Jeu:
         self.pouvoir_bouclier = True
         # Nombre de cycles de jeu avec le bouclier
         self.bouclier_duree = 50 
+
+    def personnaliser_serpent(self, couleur, motif):
+        self.couleur_serpent = couleur
+        self.motif_serpent = motif
 
     def mise_a_jour_jeu(self):
         # Maj position du deuxième serpent
@@ -535,6 +565,14 @@ class Jeu:
         for segment in self.position_serpent2:
             pygame.draw.rect(self.ecran, (0, 0, 255), (segment[0], segment[1], self.serpent_corps, self.serpent_corps))
 
+        for segment in self.position_serpent:
+            if self.motif_serpent == 'uni':
+                pygame.draw.rect(self.ecran, self.couleur_serpent, (segment[0], segment[1], self.serpent_corps, self.serpent_corps))
+            elif self.motif_serpent == 'rayures':
+                pygame.draw.rect(self.ecran, self.couleur_serpent, (segment[0], segment[1], self.serpent_corps, self.serpent_corps))
+                pygame.draw.line(self.ecran, (255, 255, 255), (segment[0], segment[1]), (segment[0] + self.serpent_corps, segment[1] + self.serpent_corps), 1)
+        self.afficher_serpent()
+
     def mise_a_jour_jeu(self):
         if self.serpent_position_x < 100 or self.serpent_position_x >= 700 or self.serpent_position_y < 100 or self.serpent_position_y >= 600:
             self.jeu_encours = False
@@ -648,6 +686,11 @@ class Jeu:
             self.malus = (random.randrange(110, 690, 10), random.randrange(110, 590, 10))
             self.taille_du_serpent -= 1
             self.score -= 2
+
+        for ennemi in self.ennemis:
+            ennemi.mise_a_jour()
+            if self.serpent_position_x == ennemi.position[0] and self.serpent_position_y == ennemi.position[1]:
+                self.jeu_encours = False
     
     def niveau_complete(self):
         return not self.pommes
@@ -704,6 +747,10 @@ class Jeu:
         for partie_serpent2 in self.position_serpent2:
             if tete_serpent == partie_serpent2:
                 self.jeu_encours = False
+        
+        for ennemi in self.ennemis:
+            pygame.draw.rect(self.ecran, (255, 0, 0), (ennemi.position[0], ennemi.position[1], 10, 10))
+        self.afficher_serpent()
 
     # creer une fonction qui permets l'affichage des
     # messages
