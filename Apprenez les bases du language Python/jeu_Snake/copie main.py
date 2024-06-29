@@ -13,7 +13,14 @@ class Jeu:
         pygame.init()
         self.ecran = pygame.display.set_mode((800, 600))
         pygame.display.set_caption("Jeu Snake")
+
+        # variables du jeu
         self.jeu_encours = True
+        self.ecran_du_debut = True
+
+        # Définir la zone de jeu et la bordure
+        self.zone_jeu = pygame.Rect(50, 50, 700, 500)
+        self.bordure = 10
 
         # Initialisation du serpent
         self.serpent_position_x = 300
@@ -29,12 +36,18 @@ class Jeu:
         self.pomme_position_y = random.randrange(110, 590, 10)
         self.pomme = 10
 
+        # Définir les couleurs initiales
+        self.couleur_serpent = (0, 255, 0)
+        self.couleur_pomme = (255, 0, 0)
+        self.couleur_fond = (0, 0, 0)
+
         # Initialisation des images
         self.image_tete_serpent = pygame.image.load('la_tete_du_serpent.png')
         self.image = pygame.image.load('jeu-snake.jpg')
         self.image_titre = pygame.transform.scale(self.image, (200, 100))
 
-        # Variables de score
+        # Variables de taille du serpent & du score
+        self.taille_du_serpent = 1
         self.score = 0
         self.meilleur_score = 0
         self.ecran_du_debut = True
@@ -45,6 +58,14 @@ class Jeu:
         # Boutons
         self.bouton_pause = pygame.Rect(700, 500, 100, 50)
         self.bouton_recommencer = pygame.Rect(300, 500, 200, 50)
+
+    def couleur_aleatoire(self):
+        return (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+
+    # créer une fonction permettant de créer un rectangle représentant les limites du jeu
+    # aux dimensions: (100, 100, 600, 500), et l'épaisseur du rectangle qui est égale à 3
+    def creer_limites(self):
+        pygame.draw.rect(self.ecran, BLANC, (100, 100, 600, 500), 3)
 
     def creer_message(self, taille, message, rectangle, couleur):
         if taille == 'petite':
@@ -68,7 +89,11 @@ class Jeu:
             self.meilleur_score = 0
 
     def fonction_principale(self):
-        self.charger_meilleur_score()
+
+    # Créer des couleurs aléatoires à chaque démarrage
+        self.couleur_serpent = self.couleur_aleatoire()
+        self.couleur_pomme = self.couleur_aleatoire()
+        self.couleur_fond = self.couleur_aleatoire()
 
         while self.ecran_du_debut:
             for evenement in pygame.event.get():
@@ -76,15 +101,17 @@ class Jeu:
                     self.jeu_encours = False
                     pygame.quit()
                     sys.exit()
+                    
                 if evenement.type == pygame.KEYDOWN:
                     if evenement.key == pygame.K_RETURN:
                         self.ecran_du_debut = False
 
-            self.ecran.fill(NOIR)
+            self.ecran.fill(self.couleur_fond)
             self.ecran.blit(self.image_titre, (300, 50, 100, 50))
-            self.creer_message('petite', 'Le but du jeu est que le serpent se développe', (250, 200, 200, 5), BLANC)
-            self.creer_message('petite', 'pour cela, il a besoin de pommes, mangez-en autants que possible, mais faites bien attention à ne pas vous mordre la queue !!', (190, 220, 200, 5), BLANC)
+            self.creer_message('petite', 'Le but du jeu est que le serpent se développe', (250, 200, 200, 5), (240, 240, 240))
+            self.creer_message('petite', 'pour cela, il a besoin de pommes, mangez-en autants que possible,mais faites bien attention à ne pas vous mordre la queue !!', (190, 220, 200, 5), (240, 240, 240))
             self.creer_message('moyenne', 'Appuyer sur Enter pour commencer', (200, 450, 200, 5), BLANC)
+
             pygame.display.flip()
 
         while self.jeu_encours:
@@ -116,10 +143,26 @@ class Jeu:
             if self.serpent_position_x <= 100 or self.serpent_position_x >= 700 or self.serpent_position_y <= 100 or self.serpent_position_y >= 600:
                 self.jeu_encours = False
 
+            # crée la condition si le serpent mange la pomme
+            if self.pomme_position_y == self.serpent_position_y and self.serpent_position_x == self.pomme_position_x:
+                self.pomme_position_x = random.randrange(110, 690, 10)
+                self.pomme_position_y = random.randrange(110, 590, 10)
+                # augmenter la taille du serpent
+                self.taille_du_serpent += 1
+                # augmenter le score
+                self.score += 1
+                if self.score > self.meilleur_score:
+                    self.meilleur_score = self.score
+
             tete_serpent = [self.serpent_position_x, self.serpent_position_y]
             self.position_serpent.append(tete_serpent)
             if len(self.position_serpent) > self.taille_du_serpent:
                 self.position_serpent.pop(0)
+
+            self.afficher_les_elements()
+            self.se_mord(tete_serpent)
+            self.afficher_score()
+            self.creer_limites()
 
             for segment in self.position_serpent[:-1]:
                 if segment == tete_serpent:
@@ -145,6 +188,30 @@ class Jeu:
             self.ajuster_difficulte()
 
         self.ecran_game_over()
+
+    def serpent_mouvement(self):
+        self.serpent_position_x += self.serpent_direction_x
+        self.serpent_position_y += self.serpent_direction_y
+
+    def afficher_les_elements(self):
+        self.ecran.fill(self.couleur_fond)
+        self.ecran.blit(self.image_tete_serpent, 
+            (self.serpent_position_x, self.serpent_position_y, self.serpent_corps, self.serpent_corps))
+        pygame.draw.rect(self.ecran, self.couleur_pomme, (self.pomme_position_x, self.pomme_position_y, self.pomme, self.pomme))
+        self.afficher_serpent()
+
+    def afficher_serpent(self):
+        for partie_du_serpent in self.position_serpent[:-1]:
+            pygame.draw.rect(self.ecran, self.couleur_serpent, (partie_du_serpent[0], partie_du_serpent[1], self.serpent_corps, self.serpent_corps))
+
+    def se_mord(self, tete_serpent):
+        for partie_du_serpent in self.position_serpent[:-1]:
+            if partie_du_serpent == tete_serpent:
+                self.jeu_encours = False
+
+    def afficher_score(self):
+        self.creer_message('grande', 'Snake Game', (320, 10, 100, 50), (255, 255, 255))
+        self.creer_message('grande', '{}'.format(str(self.score)), (375, 50, 50, 50), (255, 255, 255, 255))
 
     def ajuster_difficulte(self):
         if self.score < 5:
