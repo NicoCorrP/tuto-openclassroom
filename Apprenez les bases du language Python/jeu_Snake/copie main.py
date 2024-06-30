@@ -28,13 +28,21 @@ class Jeu:
         self.serpent_direction_x = 0
         self.serpent_direction_y = 0
         self.serpent_corps = 10
-        self.position_serpent = []
-        self.taille_du_serpent = 1
 
-        # Initialisation de la pomme
+        # position de la pomme
         self.pomme_position_x = random.randrange(110, 690, 10)
         self.pomme_position_y = random.randrange(110, 590, 10)
         self.pomme = 10
+        # Fixer les fps
+        self.clock = pygame.time.Clock()
+
+        # créer une liste contenant toutes les positions 
+        # du serpent
+        self.position_serpent = []
+
+        # Variables de taille du serpent
+        self.taille_du_serpent = 1
+        self.ecran_du_debut = True
 
         # Définir les couleurs initiales
         self.couleur_serpent = (0, 255, 0)
@@ -46,18 +54,18 @@ class Jeu:
         self.image = pygame.image.load('jeu-snake.jpg')
         self.image_titre = pygame.transform.scale(self.image, (200, 100))
 
-        # Variables de taille du serpent & du score
-        self.taille_du_serpent = 1
+        # variable du serpent
         self.score = 0
         self.meilleur_score = 0
-        self.ecran_du_debut = True
 
-        # Fixer les fps
-        self.clock = pygame.time.Clock()
-
-        # Boutons
+        # créer la position et taille du bouton de pause
         self.bouton_pause = pygame.Rect(700, 500, 100, 50)
-        self.bouton_recommencer = pygame.Rect(300, 500, 200, 50)
+        self.jeu_en_pause = False
+
+        # Créer des couleurs aléatoires à chaque démarrage
+        self.couleur_serpent = self.couleur_aleatoire()
+        self.couleur_pomme = self.couleur_aleatoire()
+        self.couleur_fond = self.couleur_aleatoire()
 
     def couleur_aleatoire(self):
         return (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
@@ -89,11 +97,6 @@ class Jeu:
             self.meilleur_score = 0
 
     def fonction_principale(self):
-
-    # Créer des couleurs aléatoires à chaque démarrage
-        self.couleur_serpent = self.couleur_aleatoire()
-        self.couleur_pomme = self.couleur_aleatoire()
-        self.couleur_fond = self.couleur_aleatoire()
 
         while self.ecran_du_debut:
             for evenement in pygame.event.get():
@@ -134,14 +137,16 @@ class Jeu:
                     elif evenement.key == pygame.K_UP and self.serpent_direction_y == 0:
                         self.serpent_direction_y = -10
                         self.serpent_direction_x = 0
-                    elif evenement.key == pygame.K_p:
-                        self.pause()
+                
+                if evenement.type == pygame.MOUSEBUTTONDOWN:
+                    if self.bouton_pause.collidepoint(evenement.pos):
+                        self.jeu_en_pause = not self.jeu_en_pause
 
-            self.serpent_position_x += self.serpent_direction_x
-            self.serpent_position_y += self.serpent_direction_y
+            if not self.jeu_en_pause:
+                if self.serpent_position_x <= 100 or self.serpent_position_x >= 700 or self.serpent_position_y <= 100 or self.serpent_position_y >= 600:
+                    self.jeu_encours = False
 
-            if self.serpent_position_x <= 100 or self.serpent_position_x >= 700 or self.serpent_position_y <= 100 or self.serpent_position_y >= 600:
-                self.jeu_encours = False
+                self.serpent_mouvement()
 
             # crée la condition si le serpent mange la pomme
             if self.pomme_position_y == self.serpent_position_y and self.serpent_position_x == self.pomme_position_x:
@@ -163,6 +168,7 @@ class Jeu:
             self.se_mord(tete_serpent)
             self.afficher_score()
             self.creer_limites()
+            self.ajuster_difficulte()
 
             for segment in self.position_serpent[:-1]:
                 if segment == tete_serpent:
@@ -184,8 +190,6 @@ class Jeu:
             pygame.draw.rect(self.ecran, BLANC, self.bouton_pause)
             self.creer_message('moyenne', 'Pause', (710, 510, 80, 30), NOIR)
             pygame.display.flip()
-
-            self.ajuster_difficulte()
 
         self.ecran_game_over()
 
@@ -250,7 +254,6 @@ class Jeu:
             self.creer_message('moyenne', 'Score: {}'.format(self.score), (350, 300, 100, 50), BLANC)
             self.creer_message('moyenne', 'Meilleur Score: {}'.format(self.meilleur_score), (350, 350, 100, 50), BLANC)
             self.creer_message('petite', 'Appuyer sur Enter pour recommencer ou Esc pour quitter', (200, 400, 400, 50), BLANC)
-            pygame.draw.rect(self.ecran, BLANC, self.bouton_recommencer)
             self.creer_message('moyenne', 'Recommencer', (320, 510, 160, 30), NOIR)
             pygame.display.flip()
 
@@ -266,10 +269,6 @@ class Jeu:
                         pygame
                         pygame.quit()
                         sys.exit()
-                if evenement.type == pygame.MOUSEBUTTONDOWN:
-                    if self.bouton_recommencer.collidepoint(evenement.pos):
-                        self.__init__()
-                        self.fonction_principale()
 
 if __name__ == "__main__":
     jeu = Jeu()
